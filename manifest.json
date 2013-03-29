@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+
+  "name": "cookie monster",
+  "description": "Analyzes the cookies of a site and tries to fingerprint the backend based on them.",
+  "version": "0.0.1.1",
+
+  "permissions": [
+    "cookies",
+    "<all_urls>",
+    "tabs"
+  ],
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  }
+}

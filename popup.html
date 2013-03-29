@@ -1,0 +1,68 @@
+<!doctype html>
+<html ng-app ng-csp>
+	<head>
+		<title>cookiemonster - The cookie analyzer</title>
+		<script src="vendor/jquery-1.9.1.min.js"></script>
+		<script src="vendor/angular.min.js"></script>
+		<script src="js/helpers.js"></script>
+		<script src="js/prefilters.js"></script>
+		<script src="js/filters.js"></script>
+		<script src="js/popup.js"></script>
+		<style>
+			body {
+				font-family: "Helvetica Neue", Arial, sans-serif;
+				font-size: 13px;
+			}
+			.cookie_list {
+				width: 800px;
+			}
+			.cookie_title {
+				background-color: #ccc;
+			}
+			.cookie_container {
+				background-color: #ddd;
+			}
+			.fixed_width {
+				font-family: "Courier New", monospace;	
+			}
+		</style>
+	</head>
+	<body>
+		<div class="cookie_list" ng-controller="CookieListCtrl">
+			<!-- Why - the fuck - does the ng-include not work? -->
+			<ng-include src="cookie_template.html" ng-repeat="cookie in cookies|filter:{is_analytics:false}"></ng-include>
+			<strong><i>Site cookies:</i></strong>
+			<div ng-repeat="cookie in cookies|filter:{is_analytics:false}" class="cookie_container">
+				<div ng-click="cookie.local_show = 1" class="cookie_title">{{cookie.name}} (<i>{{cookie.domain}}</i>)</div>
+				<div ng-show="cookie.local_show">
+					<span ng-click="cookie.local_show = 0">Hide</span><br/>
+					<div ng-show="cookie.prefilters">
+						<b>Valid in: </b>
+						<span ng-repeat="pf in cookie.prefilters" title="{{pf.description}}">{{pf.name}} </span>
+					</div>
+					<div ng-show="cookie.filters">
+						<b>Matching signatures: </b><br/>
+						<div ng-repeat="f in cookie.filters">
+							<span title="{{f.description}}">{{f.name}}</span><br/>
+							<div class="fixed_width">{{f.description}}</div>
+						</div>
+					</div>
+					<b>Value:</b><br/>
+					<div class="fixed_width">{{cookie.value}}</div>
+				</div>
+				<hr />
+			</div>
+			<strong><i>Analytics/Tracking cookies:</i></strong>
+			<div ng-repeat="cookie in cookies|filter:{is_analytics:true}">
+				<span ng-click="cookie.local_show = 1">{{cookie.name}} (<i>{{cookie.domain}}</i>)</span>
+				<div ng-show="cookie.local_show">
+					<p ng-click="cookie.local_show = 0">Hide</p>
+					<pre>{{cookie.value}}</pre>
+				</div>
+			</div>
+			<hr/>
+			<strong><i>curl command for request:</i></strong><br/>
+			<pre>curl -LO --cookie "<span ng-repeat="c in cookies">{{c.name}}={{c.undecoded_value}};</span>" "{{url}}"</pre>
+		</div>
+	</body>
+</html>

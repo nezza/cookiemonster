@@ -1,0 +1,9 @@
+HELLO INCLUDE
+<span ng-click="cookie.local_show = 1">{{cookie.name}}</span>
+<div ng-show="cookie.local_show">
+	<p ng-click="cookie.local_show = 0">Hide</p>
+	<span ng-show="cookie.is_hex">IS HEX!</span>
+
+	<span ng-show="cookie.is_base64">IS BASE64!</span>
+	<pre>{{cookie.value}}</pre>
+</div>
