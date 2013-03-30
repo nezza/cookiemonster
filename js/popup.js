@@ -2,14 +2,20 @@
 // TODO: These should be objects with description + subcategories
 tracking_cookies = [
 	"__qca", // Quantacast, http://www.quantcast.com/how-we-do-it/consumer-choice/privacy-policy/
-	"__utma", // Google Tracking
+	"__utma", // Google Analytics Tracking
 	"__utmb",
 	"__utmc",
 	"__utmv",
 	"__utmx",
-	"__utmz", // end of google tracking
+	"__utmz",
+	"_ga", // end of google tracking
 	"WT_FPC", // Webtrends
 	"WEBTRENDS_ID", // end of webtrends
+	"_gauges_unique_year", // gaug.es (by github) analytics
+	"_gauges_unique",
+	"_gauges_unique_month",
+	"_gauges_unique_hour",
+	"_gauges_unique_day", // end of gaug.es
 ]
 
 function get_current_tab(callback) {
