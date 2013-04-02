@@ -124,6 +124,20 @@ function update_cookie_object(cookie) {
 	return cookie;
 }
 
+function purify_cookie(cookie, url) {
+	var ret = {};
+	ret.url = url;
+	ret.name = cookie.name;
+	ret.value = cookie.value;
+	ret.domain = cookie.domain;
+	ret.path = cookie.path;
+	ret.secure = cookie.secure;
+	ret.httpOnly = cookie.httpOnly;
+	ret.expirationDate = cookie.expirationDate;
+	ret.storeId = cookie.storeId;
+	return ret;
+}
+
 function CookieListCtrl($scope, $rootScope) {
 	$scope.tracking_categories_opened = {}
 	$scope.tracking_categories = {}
@@ -158,6 +172,15 @@ function CookieListCtrl($scope, $rootScope) {
 		});
 	}
 	$scope.refresh_cookies();
+
+	$scope.save_cookie = function(cookie) {
+		cookie.value = cookie.local_value;
+		var ck = purify_cookie(cookie, $scope.url);
+
+		chrome.cookies.set(ck, function() {
+			$scope.$emit('refreshCookies');
+		});
+	}
 
 	$scope.delete_cookie = function(cookie) {
 		chrome.cookies.remove({url: $scope.url, name: cookie.name}, function() {

@@ -1,7 +1,12 @@
 <div class="cookie_container">
 	<div ng-init="cookie.local_show=0" class="cookie_title">
-		<span ng-click="cookie.local_show=!cookie.local_show">{{cookie.name}} (<i>{{cookie.domain}}</i>)</span>
 		<i class="icon-trash" ng-click="delete_cookie(cookie);"></i>
+		<span ng-click="cookie.local_show=!cookie.local_show">{{cookie.name}} (<i>{{cookie.domain}}</i>)</span>
+		<i class="icon-pencil" ng-click="cookie.local_edit=1"></i>
+	</div>
+	<div ng-show="cookie.local_edit">
+		<textarea ng-init="cookie.local_value = cookie.value" ng-model="cookie.local_value" class="fullwidth_textarea"></textarea>
+		<a ng-click="save_cookie(cookie);">Save</a>  <a ng-click="cookie.local_value=cookie.value; cookie.local_edit=0">Cancel</a>
 	</div>
 	<div ng-show="cookie.local_show" class="cookie_description">
 		<div ng-show="cookie.prefilters">
