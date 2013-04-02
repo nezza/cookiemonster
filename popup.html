@@ -34,9 +34,9 @@
 			<ng-include src="cookie_template.html" ng-repeat="cookie in cookies|filter:{is_analytics:false}"></ng-include>
 			<strong><i>Site cookies:</i></strong>
 			<div ng-repeat="cookie in cookies|filter:{is_analytics:false}" class="cookie_container">
-				<div ng-click="cookie.local_show = 1" class="cookie_title">{{cookie.name}} (<i>{{cookie.domain}}</i>)</div>
+				<div ng-show="cookie.local_show==0" ng-click="cookie.local_show=1" ng-init="cookie.local_show=0" class="cookie_title" >{{cookie.name}} (<i>{{cookie.domain}}</i>)</div>
+				<div ng-show="cookie.local_show==1" ng-click="cookie.local_show=0" class="cookie_title">{{cookie.name}} (<i>{{cookie.domain}}</i>)</div>
 				<div ng-show="cookie.local_show" class="cookie_description">
-					<span ng-click="cookie.local_show = 0">Hide</span><br/>
 					<div ng-show="cookie.prefilters">
 						<b>Valid in: </b>
 						<span ng-repeat="pf in cookie.prefilters" title="{{pf.description}}">{{pf.name}} </span>

@@ -16,6 +16,10 @@ tracking_cookies = [
 	"_gauges_unique_month",
 	"_gauges_unique_hour",
 	"_gauges_unique_day", // end of gaug.es
+	"_pk_id\.1\.[a-fA-F0-9]{4}", // piwik.org Web Analytics
+	"_pk_ref\.1\.[a-fA-F0-9]{4}",
+	"_pk_cvar\.1\.[a-fA-F0-9]{4}",
+	"_pk_ses\.1\.[a-fA-F0-9]{4}", // end of piwik
 ]
 
 function get_current_tab(callback) {
@@ -66,8 +70,10 @@ function update_cookie_object(cookie) {
 	cookie.undecoded_value = cookie.value;
 	cookie.value = decodeURIComponent(cookie.value)
 
-	if(tracking_cookies.indexOf(cookie.name) > -1) {
-		cookie.is_analytics = true;
+	for(var i=0; i < tracking_cookies.length; i++) {
+		if(cookie.name.match(tracking_cookies[i])) {
+			cookie.is_analytics = true;
+		}
 	}
 
 	cookie = prefilter_cookie(cookie);
