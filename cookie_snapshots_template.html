@@ -1,0 +1,4 @@
+<div ng-controller="CookieSnapshotsCtrl">
+	<p ng-click="create_snapshot()">Create snapshot</p>
+	<p ng-repeat="snapshot in snapshots" ng-click="get_snapshot(snapshot.name);">{{snapshot.name}} <i class="icon-trash" ng-click="delete_snapshot(snapshot.name)"></i></p>
+</div>
