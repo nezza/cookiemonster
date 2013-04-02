@@ -22,6 +22,9 @@
 			.cookie_description {
 				background-color: #eee;
 			}
+			.cookie_subcategory {
+				margin-left: 25px;
+			}
 			.fixed_width {
 				font-family: "Courier New", monospace;
 				word-wrap: break-word;
@@ -30,33 +33,17 @@
 	</head>
 	<body>
 		<div class="cookie_list" ng-controller="CookieListCtrl">
-			<!-- Why - the fuck - does the ng-include not work? -->
-			<!--<ng-include src="'cookie_template.html'" ng-repeat="cookie in cookies|filter:{is_tracking:false}"></ng-include>-->
 			<strong><i>Site cookies:</i></strong>
-			<div ng-repeat="cookie in cookies|filter:{is_tracking:false}" class="cookie_container">
-				<div ng-init="cookie.local_show=0" ng-click="cookie.local_show=!cookie.local_show" class="cookie_title">{{cookie.name}} (<i>{{cookie.domain}}</i>)</div>
-				<div ng-show="cookie.local_show" class="cookie_description">
-					<div ng-show="cookie.prefilters">
-						<b>Valid in: </b>
-						<span ng-repeat="pf in cookie.prefilters" title="{{pf.description}}">{{pf.name}} </span>
-					</div>
-					<div ng-show="cookie.filters">
-						<b>Matching signatures: </b><br/>
-						<div ng-repeat="f in cookie.filters">
-							<span title="{{f.description}}">{{f.name}}</span><br/>
-							<div class="fixed_width">{{f.description}}</div>
-						</div>
-					</div>
-					<b>Value:</b><br/>
-					<div class="fixed_width">{{cookie.value}}</div>
-				</div>
-				<hr />
+			<div ng-repeat="cookie in cookies|filter:{is_tracking:false}">
+				<ng-include src="'cookie_template.html'"></ng-include>
 			</div>
 			<strong><i>Analytics/Tracking cookies:</i></strong>
 			<div ng-repeat="(category, cookies) in tracking_categories">
 				<span ng-init="tracking_categories_opened[category] = false" ng-click="tracking_categories_opened[category] = !tracking_categories_opened[category]">{{category}}</span><br/>
 				<div ng-show="tracking_categories_opened[category]">
-					<div ng-repeat="cookie in cookies">{{cookie.name}} (<i>{{cookie.domain}}</i>)</div>
+					<div ng-repeat="cookie in cookies" class="cookie_subcategory">
+						<ng-include src="'cookie_template.html'"></ng-include>
+					</div>
 				</div>
 			</div>
 			<hr/>
