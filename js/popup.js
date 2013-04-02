@@ -124,6 +124,20 @@ function update_cookie_object(cookie) {
 	return cookie;
 }
 
+function purify_cookie(cookie, url) {
+	var ret = {};
+	ret.url = url;
+	ret.name = cookie.name;
+	ret.value = cookie.value;
+	ret.domain = cookie.domain;
+	ret.path = cookie.path;
+	ret.secure = cookie.secure;
+	ret.httpOnly = cookie.httpOnly;
+	ret.expirationDate = cookie.expirationDate;
+	ret.storeId = cookie.storeId;
+	return ret;
+}
+
 function CookieListCtrl($scope, $rootScope) {
 	$scope.tracking_categories_opened = {}
 	$scope.tracking_categories = {}
@@ -146,10 +160,11 @@ function CookieListCtrl($scope, $rootScope) {
 
 				// Set up tracking cookie categories
 				if(cookies[i].is_tracking) {
-					if(!(cookies[i].tracking.category in $scope.tracking_categories)) {
-						$scope.tracking_categories[cookies[i].tracking.category] = [];
+					var category = cookies[i].tracking.category;
+					if(!(category in $scope.tracking_categories)) {
+						$scope.tracking_categories[category] = [];
 					}
-					$scope.tracking_categories[cookies[i].tracking.category].push(cookies[i])
+					$scope.tracking_categories[category].push(cookies[i])
 				}
 			}
 			$scope.cookies = cookies;
@@ -157,6 +172,21 @@ function CookieListCtrl($scope, $rootScope) {
 		});
 	}
 	$scope.refresh_cookies();
+
+	$scope.save_cookie = function(cookie) {
+		cookie.value = cookie.local_value;
+		var ck = purify_cookie(cookie, $scope.url);
+
+		chrome.cookies.set(ck, function() {
+			$scope.$emit('refreshCookies');
+		});
+	}
+
+	$scope.delete_cookie = function(cookie) {
+		chrome.cookies.remove({url: $scope.url, name: cookie.name}, function() {
+			$scope.$emit('refreshCookies');
+		})
+	}
 }
 
 function CookieSnapshotsCtrl($scope, $rootScope) {
@@ -214,15 +244,16 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 		chrome.storage.local.get(name, function(items) {
 			for(var item in items) {
 				for(var cookie in items[item].cookies) {
-					if(!items[item].cookies[cookie]) continue;
 					var ck = items[item].cookies[cookie];
+
+					if(!ck) continue;
 					ck.url = $scope.tab.url;
 
 					// Not supported by cookies.set
 					delete ck.session;
 					delete ck.hostOnly;
 
-					chrome.cookies.set(items[item].cookies[cookie]);
+					chrome.cookies.set(ck);
 				}
 				$scope.$emit('refreshCookies');
 			}
