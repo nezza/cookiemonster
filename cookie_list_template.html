@@ -4,8 +4,10 @@
 		<ng-include src="'cookie_template.html'"></ng-include>
 	</div>
 	<strong><i>Analytics/Tracking cookies:</i></strong>
-	<div ng-repeat="(category, cookies) in tracking_categories">
-		<span ng-init="tracking_categories_opened[category] = false" ng-click="tracking_categories_opened[category] = !tracking_categories_opened[category]">{{category}}</span><br/>
+	<div class="cookie_title" ng-repeat="(category, cookies) in tracking_categories">
+		<i class="icon-chevron-down" ng-show="!tracking_categories_opened[category]"></i>
+		<i class="icon-chevron-up" ng-show="tracking_categories_opened[category]"></i> 
+		<span ng-init="!tracking_categories_opened[category]" ng-click="tracking_categories_opened[category] = !tracking_categories_opened[category]">{{category}}</span><br/>
 		<div ng-show="tracking_categories_opened[category]">
 			<div ng-repeat="cookie in cookies" class="cookie_subcategory">
 				<ng-include src="'cookie_template.html'"></ng-include>
