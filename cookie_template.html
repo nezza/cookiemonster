@@ -1,5 +1,8 @@
 <div class="cookie_container">
-	<div ng-init="cookie.local_show=0" ng-click="cookie.local_show=!cookie.local_show" class="cookie_title">{{cookie.name}} (<i>{{cookie.domain}}</i>)</div>
+	<div ng-init="cookie.local_show=0" class="cookie_title">
+		<span ng-click="cookie.local_show=!cookie.local_show">{{cookie.name}} (<i>{{cookie.domain}}</i>)</span>
+		<i class="icon-trash" ng-click="delete_cookie(cookie);"></i>
+	</div>
 	<div ng-show="cookie.local_show" class="cookie_description">
 		<div ng-show="cookie.prefilters">
 			<b>Valid in: </b>
