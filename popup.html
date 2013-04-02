@@ -17,13 +17,14 @@
 				width: 800px;
 			}
 			.cookie_title {
-				background-color: #ccc;
+				background-color: #fff;
 			}
-			.cookie_container {
-				background-color: #ddd;
+			.cookie_description {
+				background-color: #eee;
 			}
 			.fixed_width {
-				font-family: "Courier New", monospace;	
+				font-family: "Courier New", monospace;
+				word-wrap: break-word;
 			}
 		</style>
 	</head>
@@ -34,7 +35,7 @@
 			<strong><i>Site cookies:</i></strong>
 			<div ng-repeat="cookie in cookies|filter:{is_analytics:false}" class="cookie_container">
 				<div ng-click="cookie.local_show = 1" class="cookie_title">{{cookie.name}} (<i>{{cookie.domain}}</i>)</div>
-				<div ng-show="cookie.local_show">
+				<div ng-show="cookie.local_show" class="cookie_description">
 					<span ng-click="cookie.local_show = 0">Hide</span><br/>
 					<div ng-show="cookie.prefilters">
 						<b>Valid in: </b>
