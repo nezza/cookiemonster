@@ -1,0 +1,18 @@
+<div class="cookie_list" ng-controller="CookieListCtrl">
+	<strong><i>Site cookies:</i></strong>
+	<div ng-repeat="cookie in cookies|filter:{is_tracking:false}">
+		<ng-include src="'cookie_template.html'"></ng-include>
+	</div>
+	<strong><i>Analytics/Tracking cookies:</i></strong>
+	<div ng-repeat="(category, cookies) in tracking_categories">
+		<span ng-init="tracking_categories_opened[category] = false" ng-click="tracking_categories_opened[category] = !tracking_categories_opened[category]">{{category}}</span><br/>
+		<div ng-show="tracking_categories_opened[category]">
+			<div ng-repeat="cookie in cookies" class="cookie_subcategory">
+				<ng-include src="'cookie_template.html'"></ng-include>
+			</div>
+		</div>
+	</div>
+	<hr/>
+	<strong><i>curl command for request:</i></strong><br/>
+	<pre>curl -LO --cookie "<span ng-repeat="c in cookies">{{c.name}}={{c.undecoded_value}};</span>" "{{url}}"</pre>
+</div>

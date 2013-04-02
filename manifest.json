@@ -8,7 +8,8 @@
   "permissions": [
     "cookies",
     "<all_urls>",
-    "tabs"
+    "tabs",
+    "storage"
   ],
   "browser_action": {
     "default_icon": "icon.png",

@@ -57,6 +57,11 @@ function get_url_of_current_tab(callback) {
 	});
 }
 
+function get_domain_from_url(url) {
+	// Regex from http://stackoverflow.com/questions/3689423/google-chrome-plugin-how-to-get-domain-from-url-tab-url
+	return url.match(/^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/)[1];
+}
+
 function get_cookies_of_current_tab(callback) {
 	get_current_tab(function(tab){
 		chrome.cookies.getAll({"url":tab[0].url},function (cookie){
@@ -143,4 +148,65 @@ function CookieListCtrl($scope) {
 		$scope.url = url;
 		$scope.$apply("url");
 	});
+}
+
+function CookieSnapshotsCtrl($scope) {
+	$scope.tab = null;
+	$scope.cookies = [];
+	get_current_tab(function(tab) {
+		$scope.tab = tab[0];
+		$scope.$apply("tab");
+	});
+	get_cookies_of_current_tab(function(cookies) {
+		$scope.cookies = cookies;
+		$scope.$apply("cookies");
+	});
+
+	$scope.snapshots = [];
+
+	$scope.refresh_snapshots = function() {
+		$scope.snapshots = [];
+		chrome.storage.local.get(null, function(items) {
+			for(var item in items) {
+				$scope.snapshots.push({
+					"name": item,
+					"cookies": items[item]});
+			}
+			$scope.$apply("snapshots");
+		});
+	}
+	$scope.refresh_snapshots();
+
+	$scope.create_snapshot = function() {
+		var currentdate = new Date();
+		var cookiename = "cookies " + currentdate.toLocaleString();
+		var store = {}
+		store[cookiename] = $scope.cookies;
+		chrome.storage.local.set(store, function() {
+			$scope.refresh_snapshots();
+		});
+	}
+	$scope.get_snapshot = function(name) {
+		chrome.storage.local.get(name, function(items) {
+			for(var item in items) {
+				for(var cookie in item) {
+					if(!items[item][cookie]) continue;
+					var ck = items[item][cookie];
+					ck.url = $scope.tab.url;
+
+					// Not supported by cookies.set
+					delete ck.session;
+					delete ck.hostOnly;
+
+					chrome.cookies.set(items[item][cookie]);
+				}
+			}
+		});
+	}
+
+	$scope.delete_snapshot = function(name) {
+		chrome.storage.local.remove(name, function() {
+			$scope.refresh_snapshots();
+		})
+	}
 }
