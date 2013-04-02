@@ -117,45 +117,63 @@ function update_cookie_object(cookie) {
 	return cookie;
 }
 
-function CookieListCtrl($scope) {
+function CookieListCtrl($scope, $rootScope) {
 	$scope.tracking_categories_opened = {}
 	$scope.tracking_categories = {}
 	$scope.cookies = [];
-	get_cookies_of_current_tab(function(cookies) {
-		for(var i=0; i < cookies.length; i++) {
-			cookies[i] = update_cookie_object(cookies[i])
-
-			// Set up tracking cookie categories
-			if(cookies[i].is_tracking) {
-				if(!(cookies[i].tracking.category in $scope.tracking_categories)) {
-					$scope.tracking_categories[cookies[i].tracking.category] = [];
-				}
-				$scope.tracking_categories[cookies[i].tracking.category].push(cookies[i])
-			}
-		}
-		$scope.cookies = cookies;
-		$scope.$apply("cookies");
-	});
+	
 	$scope.url = "";
 	get_url_of_current_tab(function(url) {
 		$scope.url = url;
 		$scope.$apply("url");
 	});
+
+	$rootScope.$on('refreshCookies', function() {
+		$scope.refresh_cookies();
+	});
+
+	$scope.refresh_cookies = function() {
+		get_cookies_of_current_tab(function(cookies) {
+			for(var i=0; i < cookies.length; i++) {
+				cookies[i] = update_cookie_object(cookies[i])
+
+				// Set up tracking cookie categories
+				if(cookies[i].is_tracking) {
+					if(!(cookies[i].tracking.category in $scope.tracking_categories)) {
+						$scope.tracking_categories[cookies[i].tracking.category] = [];
+					}
+					$scope.tracking_categories[cookies[i].tracking.category].push(cookies[i])
+				}
+			}
+			$scope.cookies = cookies;
+			$scope.$apply("cookies");
+		});
+	}
+	$scope.refresh_cookies();
 }
 
-function CookieSnapshotsCtrl($scope) {
+function CookieSnapshotsCtrl($scope, $rootScope) {
 	$scope.tab = null;
 	$scope.cookies = [];
-	get_current_tab(function(tab) {
-		$scope.tab = tab[0];
-		$scope.$apply("tab");
-	});
-	get_cookies_of_current_tab(function(cookies) {
-		$scope.cookies = cookies;
-		$scope.$apply("cookies");
-	});
+	
 
 	$scope.snapshots = [];
+
+	$rootScope.$on('refreshCookies', function() {
+		$scope.refresh_cookies();
+	});
+
+	$scope.refresh_cookies = function() {
+		get_current_tab(function(tab) {
+			$scope.tab = tab[0];
+			$scope.$apply("tab");
+		});
+		get_cookies_of_current_tab(function(cookies) {
+			$scope.cookies = cookies;
+			$scope.$apply("cookies");
+		});
+	}
+	$scope.refresh_cookies();
 
 	$scope.refresh_snapshots = function() {
 		$scope.snapshots = [];
@@ -172,7 +190,7 @@ function CookieSnapshotsCtrl($scope) {
 
 	$scope.create_snapshot = function() {
 		var currentdate = new Date();
-		var cookiename = "cookies " + currentdate.toLocaleString();
+		var cookiename = get_domain_from_url($scope.tab.url) + " cookies " + currentdate.toLocaleString();
 		var store = {}
 		store[cookiename] = $scope.cookies;
 		chrome.storage.local.set(store, function() {
@@ -193,6 +211,7 @@ function CookieSnapshotsCtrl($scope) {
 
 					chrome.cookies.set(items[item][cookie]);
 				}
+				$scope.$emit('refreshCookies');
 			}
 		});
 	}
