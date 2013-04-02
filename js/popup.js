@@ -35,6 +35,13 @@ tracking_cookies_definitions = {
 		"^_pk_cvar\.1\.[a-fA-F0-9]{4}$",
 		"^_pk_ses\.1\.[a-fA-F0-9]{4}$",
 	],
+	"opentracker": [
+		"^_otor$",
+		"^_ots$",
+		"^_otr$",
+		"^_otui$",
+		"^_otpe$",
+	],
 }
 
 function get_current_tab(callback) {
