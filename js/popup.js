@@ -1,26 +1,41 @@
+function tracking_cookie(regex, category, description) {
+	var tc = new Object();
+	tc.regex = regex;
+	tc.category = category;
+	tc.description = description;
+	return tc;
+}
+
 // good source: http://sociable.co/cookies/
-// TODO: These should be objects with description + subcategories
-tracking_cookies = [
-	"__qca", // Quantacast, http://www.quantcast.com/how-we-do-it/consumer-choice/privacy-policy/
-	"__utma", // Google Analytics Tracking
-	"__utmb",
-	"__utmc",
-	"__utmv",
-	"__utmx",
-	"__utmz",
-	"_ga", // end of google tracking
-	"WT_FPC", // Webtrends
-	"WEBTRENDS_ID", // end of webtrends
-	"_gauges_unique_year", // gaug.es (by github) analytics
-	"_gauges_unique",
-	"_gauges_unique_month",
-	"_gauges_unique_hour",
-	"_gauges_unique_day", // end of gaug.es
-	"_pk_id\.1\.[a-fA-F0-9]{4}", // piwik.org Web Analytics
-	"_pk_ref\.1\.[a-fA-F0-9]{4}",
-	"_pk_cvar\.1\.[a-fA-F0-9]{4}",
-	"_pk_ses\.1\.[a-fA-F0-9]{4}", // end of piwik
-]
+tracking_cookies_definitions = {
+	"__qca": null, // Quantacast, http://www.quantcast.com/how-we-do-it/consumer-choice/privacy-policy/
+	"Google Analytics": [
+		"^__utma$",
+		"^__utmb$",
+		"^__utmc$",
+		"^__utmv$",
+		"^__utmx$",
+		"^__utmz$",
+		"^_ga$",
+	],
+	"Webtrends": [
+		"^WT_FPC$",
+		"^WEBTRENDS_ID$",
+	],
+	"gaug.es": [ // Gitub tracking
+		"^_gauges_unique_year$",
+		"^_gauges_unique$",
+		"^_gauges_unique_month$",
+		"^_gauges_unique_hour$",
+		"^_gauges_unique_day$",
+	],
+	"Piwik Web Analytics": [
+		"^_pk_id\.1\.[a-fA-F0-9]{4}$",
+		"^_pk_ref\.1\.[a-fA-F0-9]{4}$",
+		"^_pk_cvar\.1\.[a-fA-F0-9]{4}$",
+		"^_pk_ses\.1\.[a-fA-F0-9]{4}$",
+	],
+}
 
 function get_current_tab(callback) {
 	chrome.tabs.query({"status":"complete","windowId":chrome.windows.WINDOW_ID_CURRENT,"active":true}, function(tab){
@@ -38,13 +53,28 @@ function get_url_of_current_tab(callback) {
 function get_cookies_of_current_tab(callback) {
 	get_current_tab(function(tab){
 		chrome.cookies.getAll({"url":tab[0].url},function (cookie){
-			cookies = []
-			for(i=0;i<cookie.length;i++){
+			var cookies = []
+			for(var i=0;i<cookie.length;i++){
 				cookies.push(cookie[i])
 			}
 			callback(cookie);
 		});
 	});
+}
+
+function is_tracking_cookie(cookiename) {
+	for(var category in tracking_cookies_definitions) {
+		for(var signature in tracking_cookies_definitions[category]) {
+			var category_name = category;
+			if(cookiename.match(tracking_cookies_definitions[category][signature])) {
+				return {
+					category: category_name,
+					signature: tracking_cookies_definitions[category][signature]
+				};
+			}
+		}
+	}
+	return null;
 }
 
 function prefilter_cookie(cookie) {
@@ -62,7 +92,8 @@ function filter_cookie(cookie) {
 }
 
 function update_cookie_object(cookie) {
-	cookie.is_analytics = false;
+	cookie.is_tracking = false;
+	cookie.tracking = {}
 	cookie.is_known = false;
 	cookie.prefilters = [];
 	cookie.filters = [];
@@ -70,10 +101,10 @@ function update_cookie_object(cookie) {
 	cookie.undecoded_value = cookie.value;
 	cookie.value = decodeURIComponent(cookie.value)
 
-	for(var i=0; i < tracking_cookies.length; i++) {
-		if(cookie.name.match(tracking_cookies[i])) {
-			cookie.is_analytics = true;
-		}
+	var tracking;
+	if(tracking = is_tracking_cookie(cookie.name)) {
+		cookie.is_tracking = true;
+		cookie.tracking = tracking;
 	}
 
 	cookie = prefilter_cookie(cookie);
@@ -82,10 +113,20 @@ function update_cookie_object(cookie) {
 }
 
 function CookieListCtrl($scope) {
+	$scope.tracking_categories_opened = {}
+	$scope.tracking_categories = {}
 	$scope.cookies = [];
 	get_cookies_of_current_tab(function(cookies) {
 		for(var i=0; i < cookies.length; i++) {
 			cookies[i] = update_cookie_object(cookies[i])
+
+			// Set up tracking cookie categories
+			if(cookies[i].is_tracking) {
+				if(!(cookies[i].tracking.category in $scope.tracking_categories)) {
+					$scope.tracking_categories[cookies[i].tracking.category] = [];
+				}
+				$scope.tracking_categories[cookies[i].tracking.category].push(cookies[i])
+			}
 		}
 		$scope.cookies = cookies;
 		$scope.$apply("cookies");

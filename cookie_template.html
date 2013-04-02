@@ -1,9 +1,19 @@
-HELLO INCLUDE
-<span ng-click="cookie.local_show = 1">{{cookie.name}}</span>
-<div ng-show="cookie.local_show">
-	<p ng-click="cookie.local_show = 0">Hide</p>
-	<span ng-show="cookie.is_hex">IS HEX!</span>
-
-	<span ng-show="cookie.is_base64">IS BASE64!</span>
-	<pre>{{cookie.value}}</pre>
+<div class="cookie_container">
+	<div ng-init="cookie.local_show=0" ng-click="cookie.local_show=!cookie.local_show" class="cookie_title">{{cookie.name}} (<i>{{cookie.domain}}</i>)</div>
+	<div ng-show="cookie.local_show" class="cookie_description">
+		<div ng-show="cookie.prefilters">
+			<b>Valid in: </b>
+			<span ng-repeat="pf in cookie.prefilters" title="{{pf.description}}">{{pf.name}} </span>
+		</div>
+		<div ng-show="cookie.filters">
+			<b>Matching signatures: </b><br/>
+			<div ng-repeat="f in cookie.filters">
+				<span title="{{f.description}}">{{f.name}}</span><br/>
+				<div class="fixed_width">{{f.description}}</div>
+			</div>
+		</div>
+		<b>Value:</b><br/>
+		<div class="fixed_width">{{cookie.value}}</div>
+	</div>
+	<hr />
 </div>

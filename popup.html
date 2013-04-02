@@ -31,9 +31,9 @@
 	<body>
 		<div class="cookie_list" ng-controller="CookieListCtrl">
 			<!-- Why - the fuck - does the ng-include not work? -->
-			<ng-include src="cookie_template.html" ng-repeat="cookie in cookies|filter:{is_analytics:false}"></ng-include>
+			<!--<ng-include src="'cookie_template.html'" ng-repeat="cookie in cookies|filter:{is_tracking:false}"></ng-include>-->
 			<strong><i>Site cookies:</i></strong>
-			<div ng-repeat="cookie in cookies|filter:{is_analytics:false}" class="cookie_container">
+			<div ng-repeat="cookie in cookies|filter:{is_tracking:false}" class="cookie_container">
 				<div ng-init="cookie.local_show=0" ng-click="cookie.local_show=!cookie.local_show" class="cookie_title">{{cookie.name}} (<i>{{cookie.domain}}</i>)</div>
 				<div ng-show="cookie.local_show" class="cookie_description">
 					<div ng-show="cookie.prefilters">
@@ -53,11 +53,10 @@
 				<hr />
 			</div>
 			<strong><i>Analytics/Tracking cookies:</i></strong>
-			<div ng-repeat="cookie in cookies|filter:{is_analytics:true}">
-				<span ng-click="cookie.local_show = 1">{{cookie.name}} (<i>{{cookie.domain}}</i>)</span>
-				<div ng-show="cookie.local_show">
-					<p ng-click="cookie.local_show = 0">Hide</p>
-					<pre>{{cookie.value}}</pre>
+			<div ng-repeat="(category, cookies) in tracking_categories">
+				<span ng-init="tracking_categories_opened[category] = false" ng-click="tracking_categories_opened[category] = !tracking_categories_opened[category]">{{category}}</span><br/>
+				<div ng-show="tracking_categories_opened[category]">
+					<div ng-repeat="cookie in cookies">{{cookie.name}} (<i>{{cookie.domain}}</i>)</div>
 				</div>
 			</div>
 			<hr/>

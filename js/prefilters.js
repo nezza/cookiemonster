@@ -1,7 +1,6 @@
-
 function prefilter_check_if_hex(cookie) {
-	console.log("CHECK IF HEX");
 	prefilter_obj = {};
+	prefilter_obj.shortname = "Hex";
 	prefilter_obj.name = "Hex";
 	prefilter_obj.description = "The object is valid Hex.";
 	if(is_valid_hex(cookie.value)) {
@@ -12,8 +11,8 @@ function prefilter_check_if_hex(cookie) {
 
 function prefilter_check_if_b64(cookie) {
 	// RegEx from: http://stackoverflow.com/questions/8571501/how-to-check-whether-the-string-is-base64-encoded-or-not
-	console.log("CHECK IF b64")
 	prefilter_obj = {}
+	prefilter_obj.shortname = "B64";
 	prefilter_obj.name = "Base64";
 	prefilter_obj.description = "The object is valid Base64.";
 	if(is_valid_base64(cookie.value)) {
