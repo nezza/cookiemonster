@@ -23,6 +23,39 @@ function filter_check_if_rails_session(cookie) {
 	return cookie;
 }
 
+// django session cookie is a 32byte base64 string with the name sessionid
+function filter_check_if_django_session(cookie) {
+	console.log("django filter check: "+cookie.name);
+
+	if(cookie.name!="sessionid") return cookie;
+	if(!is_valid_base64(cookie.value)) return cookie;
+	if(cookie.value.length!=32) return cookie;
+
+	filter_obj = {}
+	filter_obj.name = "Django session";
+	filter_obj.description = "Python Web framework django session cookie (https://docs.djangoproject.com/en/dev/topics/http/sessions/)";
+	cookie.filters.push(filter_obj);
+	return cookie;
+}
+
+// django csrf token cookie is a 32byte base64 string with the name csrftoken
+function filter_check_if_django_csfrtoken(cookie) {
+	console.log("django filter check: "+cookie.name);
+
+	if(cookie.name!="csrftoken") return cookie;
+	if(!is_valid_base64(cookie.value)) return cookie;
+	if(cookie.value.length!=32) return cookie;
+
+	filter_obj = {}
+	filter_obj.name = "Django CSRF Token";
+	filter_obj.description = "Python Web framework django csrf token cookie (https://docs.djangoproject.com/en/dev/ref/contrib/csrf/)";
+	cookie.filters.push(filter_obj);
+	return cookie;
+}
+
 filters = [
-	filter_check_if_rails_session,
+	filter_check_if_rails_session, 
+	filter_check_if_django_session,
+	filter_check_if_django_csfrtoken,
 ]
+
