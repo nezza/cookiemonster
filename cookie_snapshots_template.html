@@ -4,9 +4,12 @@
 		Create snapshots of current cookies, to switch betweens multiple sessions.
 	</p>
 	<p>
-		<a href="#" class="btn btn-primary" ng-click="create_snapshot()"><i class="icon-camera"></i> Create snapshot</a>
+		<a href="#" class="btn btn-small btn-primary" ng-click="create_snapshot()"><i class="icon-camera"></i> Create snapshot</a>
 	</p>
-	<p ng-repeat="snapshot in snapshots" ng-click="get_snapshot(snapshot.name);"> 
-		<a href="#" class="btn btn-danger" ng-click="delete_snapshot(snapshot.name)"><i class="icon-trash"></i> {{snapshot.name}}</a>
-	</p>
+	<div ng-repeat="snapshot in snapshots">
+		<div class="btn-group">
+			<a href="#" class="btn btn-small btn-danger" ng-click="delete_snapshot(snapshot.name)"><i class="icon-trash"></i></a>
+			<a href="#" class="btn btn-small" ng-click="get_snapshot(snapshot.name);">{{snapshot.name}}</a>
+		</div>
+	</div>
 </div>
