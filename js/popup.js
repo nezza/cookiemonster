@@ -154,6 +154,8 @@ function CookieListCtrl($scope, $rootScope) {
 	});
 
 	$scope.refresh_cookies = function() {
+		$scope.tracking_categories = {};
+		$scope.cookies = [];
 		get_cookies_of_current_tab(function(cookies) {
 			for(var i=0; i < cookies.length; i++) {
 				cookies[i] = update_cookie_object(cookies[i])
@@ -167,6 +169,12 @@ function CookieListCtrl($scope, $rootScope) {
 					$scope.tracking_categories[category].push(cookies[i])
 				}
 			}
+			cookies.sort(function(a,b) {
+				var ta = a.name.toUpperCase();
+				var tb = b.name.toUpperCase();
+				return (ta < tb) ? -1 : (ta > tb) ? 1 : 0;
+			});
+
 			$scope.cookies = cookies;
 			$scope.$apply("cookies");
 		});

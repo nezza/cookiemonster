@@ -1,7 +1,7 @@
 <div class="cookie_container">
 	<div ng-init="cookie.local_show=0" class="cookie_title">
 		<i class="icon-trash" ng-click="delete_cookie(cookie);"></i>
-		<span ng-click="cookie.local_show=!cookie.local_show">{{cookie.name}} (<i>{{cookie.domain}}</i>)</span>
+		<span ng-click="cookie.local_show=!cookie.local_show">{{cookie.name}} (<i>{{cookie.domain}}{{cookie.path}}</i>)</span>
 		<i class="icon-pencil" ng-click="cookie.local_edit=1"></i>
 	</div>
 	<div ng-show="cookie.local_edit">
