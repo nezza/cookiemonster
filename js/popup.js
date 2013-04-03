@@ -6,19 +6,6 @@ function tracking_cookie(regex, category, description) {
 	return tc;
 }
 
-analysis_methods = {
-	"decode base64" : function(cookie) {
-		try {
-			return atob(cookie.value);
-		} catch(e) { 
-			return "error decoding"	
-		}
-	},
-	"hexdump" : function(cookie) {
-		return "hexdump todo";
-	}
-}
-
 // good source: http://sociable.co/cookies/
 tracking_cookies_definitions = {
 	"__qca": null, // Quantacast, http://www.quantcast.com/how-we-do-it/consumer-choice/privacy-policy/
