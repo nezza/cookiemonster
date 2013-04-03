@@ -1,4 +1,7 @@
 <div class="cookie_list" ng-controller="CookieListCtrl">
+	<div class="btn-group">
+		<button class="btn btn-small" ng-click="clear_cookies()">Clear cookies</button>
+	</div>
 	<h5>Site cookies:</h5>
 	<div ng-repeat="cookie in cookies|filter:{is_tracking:false}">
 		<ng-include src="'cookie_template.html'"></ng-include>

@@ -7,9 +7,9 @@
 		<i class="icon-pencil" ng-click="cookie.local_edit=1"></i>
 	</div>
 	<div ng-show="cookie.local_edit">
-		<textarea ng-init="cookie.local_value = cookie.value" ng-model="cookie.local_value" class="fullwidth_textarea"></textarea>
-		<a class="btn btn-mini" ng-click="save_cookie(cookie);">Save</a>  
-		<a class="btn btn-mini" ng-click="cookie.local_value=cookie.value; cookie.local_edit=0">Cancel</a>
+		<textarea autofocus tabindex="1" ng-init="cookie.local_value = cookie.value" ng-model="cookie.local_value" class="fullwidth_textarea"></textarea>
+		<button tabindex="2" class="btn btn-mini" ng-click="save_cookie(cookie);">Save</button>
+		<button tabindex="3" class="btn btn-mini" ng-click="cookie.local_value=cookie.value; cookie.local_edit=0">Cancel</button>
 	</div>
 	<div ng-show="cookie.local_show" class="cookie_description">
 		<div ng-show="cookie.prefilters">
@@ -19,7 +19,6 @@
 					{{pf.name}}
 					<span class="tag_description">{{pf.description}}</span>
 				</span>
-				
 			</span>
 		</div>
 		<div ng-show="cookie.filters">

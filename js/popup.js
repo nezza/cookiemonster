@@ -202,6 +202,12 @@ function CookieListCtrl($scope, $rootScope) {
 			$scope.$emit('refreshCookies');
 		})
 	}
+
+	$scope.clear_cookies = function() {
+		for(var i in $scope.cookies) {
+			$scope.delete_cookie($scope.cookies[i]);
+		}
+	}
 }
 
 function CookieSnapshotsCtrl($scope, $rootScope) {
