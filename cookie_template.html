@@ -8,12 +8,19 @@
 	</div>
 	<div ng-show="cookie.local_edit">
 		<textarea ng-init="cookie.local_value = cookie.value" ng-model="cookie.local_value" class="fullwidth_textarea"></textarea>
-		<a ng-click="save_cookie(cookie);">Save</a>  <a ng-click="cookie.local_value=cookie.value; cookie.local_edit=0">Cancel</a>
+		<a class="btn btn-mini" ng-click="save_cookie(cookie);">Save</a>  
+		<a class="btn btn-mini" ng-click="cookie.local_value=cookie.value; cookie.local_edit=0">Cancel</a>
 	</div>
 	<div ng-show="cookie.local_show" class="cookie_description">
 		<div ng-show="cookie.prefilters">
-			<b>Valid in: </b>
-			<span ng-repeat="pf in cookie.prefilters" title="{{pf.description}}">{{pf.name}} </span>
+			<b>Tagged as: </b>
+			<span ng-repeat="pf in cookie.prefilters" title="{{pf.description}}">
+				<span class="tag">
+					{{pf.name}}
+					<span class="tag_description">{{pf.description}}</span>
+				</span>
+				
+			</span>
 		</div>
 		<div ng-show="cookie.filters">
 			<b>Matching signatures: </b><br/>

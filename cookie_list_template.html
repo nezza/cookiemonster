@@ -1,9 +1,9 @@
 <div class="cookie_list" ng-controller="CookieListCtrl">
-	<strong><i>Site cookies:</i></strong>
+	<h5>Site cookies:</h5>
 	<div ng-repeat="cookie in cookies|filter:{is_tracking:false}">
 		<ng-include src="'cookie_template.html'"></ng-include>
 	</div>
-	<strong><i>Analytics/Tracking cookies:</i></strong>
+	<h5>Analytics/Tracking cookies:</h5>
 	<div class="cookie_title" ng-repeat="(category, cookies) in tracking_categories">
 		<i class="icon-chevron-down" ng-show="!tracking_categories_opened[category]"></i>
 		<i class="icon-chevron-up" ng-show="tracking_categories_opened[category]"></i> 
@@ -14,7 +14,6 @@
 			</div>
 		</div>
 	</div>
-	<hr/>
-	<strong><i>curl command for request:</i></strong><br/>
+	<h5>curl command for request:</h5>
 	<input class="input-block-level" type="text" value="{{curl_command}}">
 </div>
