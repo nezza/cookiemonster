@@ -31,8 +31,9 @@
 		<b>Value:</b><br/>
 		<div class="fixed_width">{{cookie.value}}</div>
 		<b>Analysis:</b> 
-		<button href="#" class="btn btn-mini" ng-click="analyse(cookie,'decode base64');">decode base64</button> 
 		<button href="#" class="btn btn-mini" ng-click="analyse(cookie,'hexdump');">hexdump</button>
+		<button href="#" class="btn btn-mini" ng-click="analyse(cookie,'decode base64');">decode base64</button> 
+		<button href="#" class="btn btn-mini" ng-click="analyse(cookie,'json');">json</button>
 		
 		<div ng-bind-html-unsafe="cookie.analysis"></div>
 	</div>
