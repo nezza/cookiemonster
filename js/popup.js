@@ -6,6 +6,19 @@ function tracking_cookie(regex, category, description) {
 	return tc;
 }
 
+analysis_methods = {
+	"decode base64" : function(cookie) {
+		try {
+			return atob(cookie.value);
+		} catch(e) { 
+			return "error decoding"	
+		}
+	},
+	"hexdump" : function(cookie) {
+		return "hexdump todo";
+	}
+}
+
 // good source: http://sociable.co/cookies/
 tracking_cookies_definitions = {
 	"__qca": null, // Quantacast, http://www.quantcast.com/how-we-do-it/consumer-choice/privacy-policy/
@@ -143,6 +156,7 @@ function CookieListCtrl($scope, $rootScope) {
 	$scope.tracking_categories = {}
 	$scope.cookies = [];
 	$scope.curl_command = "";
+	$scope.url = "";
 	
 	get_url_of_current_tab(function(url) {
 		$scope.url = url;
@@ -156,6 +170,7 @@ function CookieListCtrl($scope, $rootScope) {
 	$scope.refresh_cookies = function() {
 		$scope.tracking_categories = {};
 		$scope.cookies = [];
+		
 		get_cookies_of_current_tab(function(cookies) {
 			curl_command = "curl -LO --cookie '";
 			for(var i=0; i < cookies.length; i++) {
@@ -169,6 +184,7 @@ function CookieListCtrl($scope, $rootScope) {
 					}
 					$scope.tracking_categories[category].push(cookies[i])
 				}
+				
 				curl_command += cookies[i].name+"="+cookies[i].undecoded_value+";";
 			}
 
@@ -207,6 +223,12 @@ function CookieListCtrl($scope, $rootScope) {
 		for(var i in $scope.cookies) {
 			$scope.delete_cookie($scope.cookies[i]);
 		}
+	}
+	
+	// analyse cookie functions. Will take a cookie and a method to return value for the vield cookie.analysis
+	$scope.analyse = function(cookie,method) {
+		console.log("run analysis "+method);
+		cookie.analysis = analysis_methods[method](cookie);
 	}
 }
 
