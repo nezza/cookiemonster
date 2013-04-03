@@ -68,7 +68,7 @@ hexdump = function(data) {
     
     if(hexline && charline) {
         for(i=hexline.length;i<49;++i) hexline+= " ";
-        for(i=charline.length;i<49;++i) charline+= " ";
+        for(i=charline.length;i<16;++i) charline+= " ";
         out += address+"  "+hexline+" |"+charline+"|\n";
     }
     out += "</pre></p>";
