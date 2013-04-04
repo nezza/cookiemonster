@@ -15,7 +15,7 @@ function is_valid_base64(data) {
 }
 
 function get_current_tab(callback) {
-	chrome.tabs.query({"status":"complete","windowId":chrome.windows.WINDOW_ID_CURRENT,"active":true}, function(tab){
+	chrome.tabs.query({"windowId":chrome.windows.WINDOW_ID_CURRENT,"active":true}, function(tab){
 		callback(tab);
 	});
 

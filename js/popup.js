@@ -195,8 +195,10 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 	$scope.tab = null;
 	$scope.cookies = [];
 	
-
+	// Only holds snapshots for current domain
 	$scope.snapshots = [];
+	// Holds all snapshots
+	$scope.all_snapshots = [];
 
 	$rootScope.$on('refreshCookies', function() {
 		$scope.refresh_cookies();
@@ -216,14 +218,21 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 
 	$scope.refresh_snapshots = function() {
 		$scope.snapshots = [];
+		$scope.all_snapshots = [];
 		chrome.storage.local.get(null, function(items) {
 			for(var item in items) {
-				if(items[item].domain !== get_domain_from_url($scope.tab.url)) continue;
-				$scope.snapshots.push({
-					"name": item,
-					"cookies": items[item]});
+				if(items[item].domain !== get_domain_from_url($scope.tab.url)) {
+					$scope.all_snapshots.push({
+						"name": item,
+						"cookies": items[item]});
+				} else {
+					$scope.snapshots.push({
+						"name": item,
+						"cookies": items[item]});
+				}
 			}
 			$scope.$apply("snapshots");
+			$scope.$apply("all_snapshots");
 		});
 	}
 	$scope.refresh_snapshots();
@@ -232,6 +241,7 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 		var currentdate = new Date();
 		var cookiename = get_domain_from_url($scope.tab.url) + " cookies " + currentdate.toLocaleString();
 		var cookie_object = {
+			url: $scope.tab.url,
 			domain: get_domain_from_url($scope.tab.url),
 			cookies: $scope.cookies
 		};
@@ -242,14 +252,14 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 		});
 	}
 
-	$scope.get_snapshot = function(name) {
+	$scope.get_snapshot = function(name, callback) {
 		chrome.storage.local.get(name, function(items) {
 			for(var item in items) {
 				for(var cookie in items[item].cookies) {
 					var ck = items[item].cookies[cookie];
 
 					if(!ck) continue;
-					ck.url = $scope.tab.url;
+					ck.url = items[item].url;
 
 					// Not supported by cookies.set
 					delete ck.session;
@@ -258,7 +268,19 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 					chrome.cookies.set(ck);
 				}
 				$scope.$emit('refreshCookies');
+				if(callback) {
+					callback(items[item]);
+				}
 			}
+		});
+	}
+
+	$scope.goto_snapshot = function(name) {
+		$scope.get_snapshot(name, function(snapshot) {
+			console.log("Loading snapshot for URL: " + snapshot.url);
+			chrome.tabs.update($scope.tab.id, {
+				url: snapshot.url
+			});
 		});
 	}
 
@@ -266,6 +288,25 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 		chrome.storage.local.remove(name, function() {
 			$scope.refresh_snapshots();
 		})
+	}
+
+	// TODO: Deduplicate this code...
+	$scope.delete_cookie = function(cookie) {
+		chrome.cookies.remove({url: $scope.tab.url, name: cookie.name}, function() {
+			$scope.$emit('refreshCookies');
+		})
+	}
+
+	$scope.clear_cookies = function() {
+		for(var i in $scope.cookies) {
+			$scope.delete_cookie($scope.cookies[i]);
+		}
+	}
+
+	$scope.reload_tab = function() {
+		chrome.tabs.reload($scope.tab.id, null, function() {
+			$scope.$emit('refreshCookies');
+		});
 	}
 }
 

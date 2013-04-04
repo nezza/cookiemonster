@@ -27,3 +27,19 @@ cookiemonster_directives.directive('labeledInput', function() {
 		</div>'
 	}
 })
+
+cookiemonster_directives.directive('snapshot', function() {
+	return {
+		restrict: 'E',
+		replace: true,
+		scope: {
+			snapshot: '=snapshot',
+			show_goto: '@showGoto'
+		},
+		template: '<div class="btn-group">\
+			<a href="#" class="btn btn-small btn-danger" ng-click="delete_snapshot(snapshot.name)"><i class="icon-trash icon-white"></i> delete</a>\
+			<a href="#" class="btn btn-small" ng-click="get_snapshot(snapshot.name);">{{snapshot.name}}</a>\
+			<a ng-show="show_goto" href="#" class="btn btn-small" ng-click="goto_snapshot(snapshot.name);">Go to snapshot URL</a>\
+		</div>'
+	}
+})
