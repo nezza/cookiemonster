@@ -132,7 +132,7 @@ function CookieListCtrl($scope, $rootScope) {
 		
 		get_cookies_of_current_tab(function(cookies) {
 			curl_command = "curl -LO --cookie '";
-			wget_command = "wget --no-cookies --header '";
+			wget_command = "wget --no-cookies --header 'Cookie: ";
 			for(var i=0; i < cookies.length; i++) {
 				cookies[i] = update_cookie_object(cookies[i])
 
