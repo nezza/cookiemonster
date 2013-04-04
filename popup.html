@@ -18,7 +18,7 @@
 				font-family: "Helvetica Neue", Arial, sans-serif;
 				font-size: 13px;
 				width: 800px;
-
+				margin: 5px;
 			}
 			.cookie_title {
 				background-color: #ddd;
@@ -79,17 +79,24 @@
 	</head>
 	<body>
 		<ul class="nav nav-tabs">
-			<li><a href="#cookies" data-toggle="tab">Cookies</a></li>
+			<li class="active"><a href="#cookies" data-toggle="tab">Cookies</a></li>
 			<li><a href="#snapshots" data-toggle="tab">Snapshots</a></li>
+			<li><a href="#settings" data-toggle="tab">Settings</a></li>
 		</ul>
 		<div class="tab-content">
 			
 			<div class="tab-pane active" id="cookies">
 				<ng-include src="'template/cookie_list_template.html'"></ng-include>
 			</div>
+			
 			<div class="tab-pane" id="snapshots">
 				<ng-include src="'template/cookie_snapshots_template.html'"></ng-include>
 			</div>
+			
+			<div class="tab-pane" id="settings">
+				<ng-include src="'template/cookie_settings_template.html'"></ng-include>
+			</div>
+			
 		</div>
 	</body>
 </html>
