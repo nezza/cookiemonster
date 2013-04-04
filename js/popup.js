@@ -160,6 +160,7 @@ function CookieListCtrl($scope, $rootScope) {
 		
 		get_cookies_of_current_tab(function(cookies) {
 			curl_command = "curl -LO --cookie '";
+			wget_command = "wget --no-cookies --header '";
 			for(var i=0; i < cookies.length; i++) {
 				cookies[i] = update_cookie_object(cookies[i])
 
@@ -173,9 +174,11 @@ function CookieListCtrl($scope, $rootScope) {
 				}
 				
 				curl_command += cookies[i].name+"="+cookies[i].undecoded_value+";";
+				wget_command += cookies[i].name+"="+cookies[i].undecoded_value+"; ";
 			}
 
 			curl_command += "' '"+$scope.url+"'";
+			wget_command += "' '"+$scope.url+"'";
 
 			cookies.sort(function(a,b) {
 				var ta = a.name.toUpperCase();
@@ -184,6 +187,7 @@ function CookieListCtrl($scope, $rootScope) {
 			});
 
 			$scope.cookies = cookies;
+			$scope.wget_command = wget_command;
 			$scope.curl_command = curl_command;
 			$scope.$apply("cookies");
 			$scope.$apply("curl_command");
@@ -295,4 +299,9 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 			$scope.refresh_snapshots();
 		})
 	}
+}
+
+
+function SettingsCtrl($scope, $rootScope) {
+	
 }
