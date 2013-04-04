@@ -13,3 +13,33 @@ function is_valid_base64(data) {
 	}
 	return false;
 }
+
+function get_current_tab(callback) {
+	chrome.tabs.query({"status":"complete","windowId":chrome.windows.WINDOW_ID_CURRENT,"active":true}, function(tab){
+		callback(tab);
+	});
+
+}
+
+function get_url_of_current_tab(callback) {
+	get_current_tab(function(tab) {
+		callback(tab[0].url);
+	});
+}
+
+function get_domain_from_url(url) {
+	// Regex from http://stackoverflow.com/questions/3689423/google-chrome-plugin-how-to-get-domain-from-url-tab-url
+	return url.match(/^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/)[1];
+}
+
+function get_cookies_of_current_tab(callback) {
+	get_current_tab(function(tab){
+		chrome.cookies.getAll({"url":tab[0].url},function (cookie){
+			var cookies = []
+			for(var i=0;i<cookie.length;i++){
+				cookies.push(cookie[i])
+			}
+			callback(cookie);
+		});
+	});
+}
