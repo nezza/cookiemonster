@@ -1,0 +1,61 @@
+body {
+	font-family: "Helvetica Neue", Arial, sans-serif;
+	font-size: 13px;
+	width: 800px;
+	margin: 5px;
+}
+.cookie_title {
+	background-color: #ddd;
+	cursor: pointer;
+}
+.cookie_title:hover {
+	background-color: #ddd;
+}
+.cookie_description {
+	background-color: #eee;
+}
+.cookie_subcategory {
+	margin-left: 25px;
+	cursor: pointer;
+}
+.tag {
+	background-color: #fff8dc;
+	border: 1px solid #e0dcbf;
+	font-size: 0.95em;
+	padding: 1px;
+	cursor: pointer;
+	margin: 0px 2px;
+}
+.tag .tag_description {
+	background-color: #fff8dc;
+	border: 1px solid #e0dcbf;
+	font-size: 0.95em;
+	padding: 1px;
+	position: absolute;
+	display: none;
+}
+.tag:hover .tag_description {
+	display: inline;
+	margin-top: 25px;
+	margin-left: -25px;
+}
+.fixed_width {
+	font-family: "Courier New", monospace;
+	word-wrap: break-word;
+}
+.fullwidth_textarea {
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 100%;
+}
+hr {
+	margin: 0;
+}
+pre {
+	word-wrap: normal;
+	white-space: pre;
+	font-size: 0.95em;
+}
+.nav {
+	margin-bottom: 8px;
+}

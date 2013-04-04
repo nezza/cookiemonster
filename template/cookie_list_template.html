@@ -4,7 +4,7 @@
 	</div>
 	<h5>Site cookies:</h5>
 	<div ng-repeat="cookie in cookies|filter:{is_tracking:false}">
-		<ng-include src="'cookie_template.html'"></ng-include>
+		<ng-include src="'template/cookie_template.html'"></ng-include>
 	</div>
 	<h5>Analytics/Tracking cookies:</h5>
 	<div class="cookie_title" ng-repeat="(category, cookies) in tracking_categories">
@@ -13,10 +13,11 @@
 		<span ng-init="!tracking_categories_opened[category]" ng-click="tracking_categories_opened[category] = !tracking_categories_opened[category]">{{category}}</span><br/>
 		<div ng-show="tracking_categories_opened[category]">
 			<div ng-repeat="cookie in cookies" class="cookie_subcategory">
-				<ng-include src="'cookie_template.html'"></ng-include>
+				<ng-include src="'template/cookie_template.html'"></ng-include>
 			</div>
 		</div>
 	</div>
-	<h5>curl command for request:</h5>
-	<input class="input-block-level" type="text" value="{{curl_command}}">
+	<h5>Useful stuff:</h5>
+	<labeled-input title="curl" value="{{curl_command}}"></labeled-input>
+	<labeled-input title="wget" value="{{wget_command}}"></labeled-input>
 </div>

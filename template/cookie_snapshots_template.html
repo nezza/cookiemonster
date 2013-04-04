@@ -1,0 +1,20 @@
+<div ng-controller="CookieSnapshotsCtrl">
+	<h5>Snapshots</h5>
+	<p>
+		Create snapshots of current cookies, to switch betweens multiple sessions.
+	</p>
+	<p>
+		<div class="btn-group">
+			<a href="#" class="btn btn-small btn-primary" ng-click="create_snapshot()"><i class="icon-camera icon-white"></i> Create snapshot</a>
+			<a href="#" class="btn btn-small btn-primary" ng-click="create_snapshot(); clear_cookies(); reload_tab();">Snapshot, clear and reload</a>
+		</div>
+	</p>
+	<h4>For current page:</h4>
+	<div ng-repeat="snapshot in snapshots">
+		<snapshot></snapshot>
+	</div>
+	<h4>For all pages:</h4>
+	<div ng-repeat="snapshot in all_snapshots">
+		<snapshot></snapshot>
+	</div>
+</div>

@@ -23,7 +23,7 @@ function filter_check_if_rails_session(cookie) {
 	return cookie;
 }
 
-// django session cookie is a 32byte base64 string with the name sessionid
+// django session cookie is a 32byte hash string with the name sessionid
 function filter_check_if_django_session(cookie) {
 	if(cookie.name!="sessionid") return cookie;
 	if(!is_valid_base64(cookie.value)) return cookie;
@@ -36,10 +36,10 @@ function filter_check_if_django_session(cookie) {
 	return cookie;
 }
 
-// django csrf token cookie is a 32byte base64 string with the name csrftoken
+// django csrf token cookie is a 32byte hash string with the name csrftoken
 function filter_check_if_django_csfrtoken(cookie) {
 	if(cookie.name!="csrftoken") return cookie;
-	if(!is_valid_base64(cookie.value)) return cookie;
+	if(!is_valid_hex(cookie.value)) return cookie;
 	if(cookie.value.length!=32) return cookie;
 
 	filter_obj = {}
@@ -49,9 +49,23 @@ function filter_check_if_django_csfrtoken(cookie) {
 	return cookie;
 }
 
+// php session id cookie is a 32byte hash string with the name PHPSESSID
+function filter_check_if_php_session(cookie) {
+	if(cookie.name!="PHPSESSID") return cookie;
+	if(!is_valid_hex(cookie.value)) return cookie;
+	if(cookie.value.length!=32) return cookie;
+	
+	filter_obj = {}
+	filter_obj.name = "PHP session";
+	filter_obj.description = "PHP session ID cookie (http://www.php.net/manual/en/function.session-id.php)";
+	cookie.filters.push(filter_obj);
+	return cookie;
+}
+
 filters = [
 	filter_check_if_rails_session, 
 	filter_check_if_django_session,
 	filter_check_if_django_csfrtoken,
+	filter_check_if_php_session,
 ]
 

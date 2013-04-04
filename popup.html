@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app ng-csp>
+<html ng-app="cookiemonster" ng-csp>
 	<head>
 		<title>cookiemonster - The cookie analyzer</title>
 		<script src="vendor/jquery-1.9.1.min.js"></script>
@@ -8,85 +8,33 @@
 		<script src="js/helpers.js"></script>
 		<script src="js/prefilters.js"></script>
 		<script src="js/filters.js"></script>
+		<script src="js/analysis.js"></script>
+		<script src="js/directives.js"></script>
 		<script src="js/popup.js"></script>
 
 		<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-		<style>
-			body {
-				font-family: "Helvetica Neue", Arial, sans-serif;
-				font-size: 13px;
-				width: 800px;
-
-			}
-			.cookie_title {
-				background-color: #ddd;
-				cursor: pointer;
-			}
-			.cookie_title:hover {
-				background-color: #ddd;
-			}
-			.cookie_description {
-				background-color: #eee;
-			}
-			.cookie_subcategory {
-				margin-left: 25px;
-				cursor: pointer;
-			}
-			.tag {
-				background-color: #fff8dc;
-				border: 1px solid #e0dcbf;
-				font-size: 0.95em;
-				padding: 1px;
-				cursor: pointer;
-				margin: 0px 2px;
-			}
-			.tag .tag_description {
-				background-color: #fff8dc;
-				border: 1px solid #e0dcbf;
-				font-size: 0.95em;
-				padding: 1px;
-				position: absolute;
-				display: none;
-			}
-			.tag:hover .tag_description {
-				display: inline;
-				margin-top: 25px;
-				margin-left: -25px;
-			}
-			.fixed_width {
-				font-family: "Courier New", monospace;
-				word-wrap: break-word;
-			}
-			.fullwidth_textarea {
-			    -webkit-box-sizing: border-box;
-				box-sizing: border-box;
-				width: 100%;
-			}
-			hr {
-				margin: 0;
-			}
-			pre {
-				word-wrap: normal;
-				white-space: pre;
-			}
-			.nav {
-				margin-bottom: 8px;
-			}
-		</style>
+		<link href="popup.css" rel="stylesheet">
 	</head>
 	<body>
 		<ul class="nav nav-tabs">
-			<li><a href="#cookies" data-toggle="tab">Cookies</a></li>
+			<li class="active"><a href="#cookies" data-toggle="tab">Cookies</a></li>
 			<li><a href="#snapshots" data-toggle="tab">Snapshots</a></li>
+			<li><a href="#settings" data-toggle="tab">Settings</a></li>
 		</ul>
 		<div class="tab-content">
 			
 			<div class="tab-pane active" id="cookies">
-				<ng-include src="'cookie_list_template.html'"></ng-include>
+				<ng-include src="'template/cookie_list_template.html'"></ng-include>
 			</div>
+			
 			<div class="tab-pane" id="snapshots">
-				<ng-include src="'cookie_snapshots_template.html'"></ng-include>
+				<ng-include src="'template/cookie_snapshots_template.html'"></ng-include>
 			</div>
+			
+			<div class="tab-pane" id="settings">
+				<ng-include src="'template/cookie_settings_template.html'"></ng-include>
+			</div>
+			
 		</div>
 	</body>
 </html>

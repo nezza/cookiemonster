@@ -1,3 +1,5 @@
+var cookiemonster = angular.module('cookiemonster', ['cookiemonsterDirectives']);
+
 function tracking_cookie(regex, category, description) {
 	var tc = new Object();
 	tc.regex = regex;
@@ -42,36 +44,6 @@ tracking_cookies_definitions = {
 		"^_otui$",
 		"^_otpe$",
 	],
-}
-
-function get_current_tab(callback) {
-	chrome.tabs.query({"status":"complete","windowId":chrome.windows.WINDOW_ID_CURRENT,"active":true}, function(tab){
-		callback(tab);
-	});
-
-}
-
-function get_url_of_current_tab(callback) {
-	get_current_tab(function(tab) {
-		callback(tab[0].url);
-	});
-}
-
-function get_domain_from_url(url) {
-	// Regex from http://stackoverflow.com/questions/3689423/google-chrome-plugin-how-to-get-domain-from-url-tab-url
-	return url.match(/^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/)[1];
-}
-
-function get_cookies_of_current_tab(callback) {
-	get_current_tab(function(tab){
-		chrome.cookies.getAll({"url":tab[0].url},function (cookie){
-			var cookies = []
-			for(var i=0;i<cookie.length;i++){
-				cookies.push(cookie[i])
-			}
-			callback(cookie);
-		});
-	});
 }
 
 function is_tracking_cookie(cookiename) {
@@ -143,6 +115,8 @@ function CookieListCtrl($scope, $rootScope) {
 	$scope.tracking_categories = {}
 	$scope.cookies = [];
 	$scope.curl_command = "";
+	$scope.wget_command = "";
+	$scope.url = "";
 	
 	get_url_of_current_tab(function(url) {
 		$scope.url = url;
@@ -156,8 +130,8 @@ function CookieListCtrl($scope, $rootScope) {
 	$scope.refresh_cookies = function() {
 		$scope.tracking_categories = {};
 		$scope.cookies = [];
+		
 		get_cookies_of_current_tab(function(cookies) {
-			curl_command = "curl -LO --cookie '";
 			for(var i=0; i < cookies.length; i++) {
 				cookies[i] = update_cookie_object(cookies[i])
 
@@ -169,10 +143,7 @@ function CookieListCtrl($scope, $rootScope) {
 					}
 					$scope.tracking_categories[category].push(cookies[i])
 				}
-				curl_command += cookies[i].name+"="+cookies[i].undecoded_value+";";
 			}
-
-			curl_command += "' '"+$scope.url+"'";
 
 			cookies.sort(function(a,b) {
 				var ta = a.name.toUpperCase();
@@ -181,9 +152,13 @@ function CookieListCtrl($scope, $rootScope) {
 			});
 
 			$scope.cookies = cookies;
-			$scope.curl_command = curl_command;
+
+			$scope.curl_command = generate_curl_command(cookies, $scope.url);
+			$scope.wget_command = generate_wget_command(cookies, $scope.url);
+
 			$scope.$apply("cookies");
 			$scope.$apply("curl_command");
+			$scope.$apply("wget_command");
 		});
 	}
 	$scope.refresh_cookies();
@@ -208,14 +183,22 @@ function CookieListCtrl($scope, $rootScope) {
 			$scope.delete_cookie($scope.cookies[i]);
 		}
 	}
+	
+	// analyse cookie functions. Will take a cookie and a method to return value for the vield cookie.analysis
+	$scope.analyse = function(cookie,method) {
+		console.log("run analysis "+method);
+		cookie.analysis = analysis_methods[method](cookie);
+	}
 }
 
 function CookieSnapshotsCtrl($scope, $rootScope) {
 	$scope.tab = null;
 	$scope.cookies = [];
 	
-
+	// Only holds snapshots for current domain
 	$scope.snapshots = [];
+	// Holds all snapshots
+	$scope.all_snapshots = [];
 
 	$rootScope.$on('refreshCookies', function() {
 		$scope.refresh_cookies();
@@ -235,15 +218,22 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 
 	$scope.refresh_snapshots = function() {
 		$scope.snapshots = [];
+		$scope.all_snapshots = [];
 		chrome.storage.local.get(null, function(items) {
 			for(var item in items) {
 				if(items[item].type != "snapshot") continue;
-				if(items[item].domain !== get_domain_from_url($scope.tab.url)) continue;
-				$scope.snapshots.push({
-					"name": item,
-					"cookies": items[item]});
+				if(items[item].domain !== get_domain_from_url($scope.tab.url)) {
+					$scope.all_snapshots.push({
+						"name": item,
+						"cookies": items[item]});
+				} else {
+					$scope.snapshots.push({
+						"name": item,
+						"cookies": items[item]});
+				}
 			}
 			$scope.$apply("snapshots");
+			$scope.$apply("all_snapshots");
 		});
 	}
 	$scope.refresh_snapshots();
@@ -253,6 +243,7 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 		var cookiename = get_domain_from_url($scope.tab.url) + " cookies " + currentdate.toLocaleString();
 		var cookie_object = {
 			type: "snapshot",
+			url: $scope.tab.url,
 			domain: get_domain_from_url($scope.tab.url),
 			cookies: $scope.cookies
 		};
@@ -263,7 +254,7 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 		});
 	}
 
-	$scope.get_snapshot = function(name) {
+	$scope.get_snapshot = function(name, callback) {
 		chrome.storage.local.get(name, function(items) {
 			for(var item in items) {
 				for(var cookie in items[item].cookies) {
@@ -271,12 +262,24 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 
 					if(!ck) continue;
 
-					var ck_pure = purify_cookie(ck, $scope.tab.url);
+					var ck_pure = purify_cookie(ck, items[item].url);
 
 					chrome.cookies.set(ck_pure);
 				}
 				$scope.$emit('refreshCookies');
+				if(callback) {
+					callback(items[item]);
+				}
 			}
+		});
+	}
+
+	$scope.goto_snapshot = function(name) {
+		$scope.get_snapshot(name, function(snapshot) {
+			console.log("Loading snapshot for URL: " + snapshot.url);
+			chrome.tabs.update($scope.tab.id, {
+				url: snapshot.url
+			});
 		});
 	}
 
@@ -285,4 +288,28 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 			$scope.refresh_snapshots();
 		})
 	}
+
+	// TODO: Deduplicate this code...
+	$scope.delete_cookie = function(cookie) {
+		chrome.cookies.remove({url: $scope.tab.url, name: cookie.name}, function() {
+			$scope.$emit('refreshCookies');
+		})
+	}
+
+	$scope.clear_cookies = function() {
+		for(var i in $scope.cookies) {
+			$scope.delete_cookie($scope.cookies[i]);
+		}
+	}
+
+	$scope.reload_tab = function() {
+		chrome.tabs.reload($scope.tab.id, null, function() {
+			$scope.$emit('refreshCookies');
+		});
+	}
+}
+
+
+function SettingsCtrl($scope, $rootScope) {
+	
 }
