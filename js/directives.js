@@ -6,7 +6,6 @@ cookiemonster_directives.directive('tooltip', function() {
 		// We're not replacing the element
 		replace: false,
 		link: function(scope, element, attrs) {
-			console.log("LINKING TOOLTIP");
 			element.tooltip({
 				title: attrs.tooltip
 			});
@@ -14,4 +13,17 @@ cookiemonster_directives.directive('tooltip', function() {
 	}
 });
 
-
+cookiemonster_directives.directive('labeledInput', function() {
+	return {
+		restrict: 'E',
+		replace: true,
+		scope: {
+			title:'@title',
+			value: '@value',
+		},
+		template: '<div class="input-prepend input-xxlarge">\
+			<span class="add-on">{{title}}</span>\
+			<input class="input-xxlarge" type="text" value="{{value}}">\
+		</div>'
+	}
+})
