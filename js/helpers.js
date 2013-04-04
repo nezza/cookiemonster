@@ -43,3 +43,25 @@ function get_cookies_of_current_tab(callback) {
 		});
 	});
 }
+
+function generate_cookie_header_list(cookies) {
+	var cookie_list = "";
+	for(var i=0; i < cookies.length; i++) {
+		cookie_list += cookies[i].name + "=" + cookies[i].undecoded_value + ";";
+	}
+	return cookie_list;
+}
+
+function generate_wget_command(cookies, url) {
+	wget_command = "wget --no-cookies --header 'Cookie: "
+	wget_command += generate_cookie_header_list(cookies);
+	wget_command += "' '" + url + "'";
+	return wget_command;
+}
+
+function generate_curl_command(cookies, url) {
+	curl_command = "curl -LO --cookie '";
+	curl_command += generate_cookie_header_list(cookies);
+	curl_command += "' '" + url + "'";
+	return curl_command;
+}
