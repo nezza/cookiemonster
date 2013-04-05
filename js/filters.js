@@ -62,6 +62,37 @@ function filter_check_if_php_session(cookie) {
 	return cookie;
 }
 
+length = function(a) { return function(value) { return(a==value.length); } }
+regex = function(a) { return function(value) { return(value.match(a)); } }
+
+filter = {
+	'django_session' : {
+		'cookie': {
+			'name': [regex('^sessionid$')],
+			'value': [is_valid_base64,length(32)],
+		},
+		'result': {
+			'name': 'Django session',
+			'description': 'Python Web framework django session cookie (https://docs.djangoproject.com/en/dev/topics/http/sessions/)',	
+		},
+	},
+	'django_session',
+	'django_csrf',
+	'php_session',
+}
+/*
+'filter_name' : {
+	'cookie': {
+		'name': [matching,functions],
+		'value': [matching,functions],
+	},
+	'result': {
+		'name': 'Name',
+		'description': 'description',	
+	},
+},
+*/
+
 filters = [
 	filter_check_if_rails_session, 
 	filter_check_if_django_session,
