@@ -181,12 +181,14 @@ function CookieListCtrl($scope, $rootScope) {
 		chrome.cookies.remove({url: $scope.url, name: cookie.name}, function() {
 			$scope.$emit('refreshCookies');
 		});
-		$event.stopPropagation();
+		if($event) {
+			$event.stopPropagation();
+		}
 	}
 
 	$scope.clear_cookies = function() {
 		for(var i in $scope.cookies) {
-			$scope.delete_cookie($scope.cookies[i]);
+			$scope.delete_cookie(null, $scope.cookies[i]);
 		}
 	}
 	
