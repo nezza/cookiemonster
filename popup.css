@@ -59,3 +59,8 @@ pre {
 .nav {
 	margin-bottom: 8px;
 }
+
+.padded_label {
+	margin-left: 3px;
+	margin-right: 3px;
+}

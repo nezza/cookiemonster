@@ -172,10 +172,16 @@ function CookieListCtrl($scope, $rootScope) {
 		});
 	}
 
-	$scope.delete_cookie = function(cookie) {
+	$scope.edit_cookie = function($event, cookie) {
+		$event.stopPropagation();
+		cookie.local_edit = 1;
+	}
+
+	$scope.delete_cookie = function($event, cookie) {
 		chrome.cookies.remove({url: $scope.url, name: cookie.name}, function() {
 			$scope.$emit('refreshCookies');
-		})
+		});
+		$event.stopPropagation();
 	}
 
 	$scope.clear_cookies = function() {

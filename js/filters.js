@@ -18,6 +18,7 @@ function filter_check_if_rails_session(cookie) {
 
 	filter_obj = {}
 	filter_obj.name ="Ruby on Rails session";
+	filter_obj.shortname = "Rails Session";
 	filter_obj.description = "Marshalled ruby object: " + marshalled_object;
 	cookie.filters.push(filter_obj);
 	return cookie;
@@ -31,6 +32,7 @@ function filter_check_if_django_session(cookie) {
 
 	filter_obj = {}
 	filter_obj.name = "Django session";
+	filter_obj.shortname = "Django session";
 	filter_obj.description = "Python Web framework django session cookie (https://docs.djangoproject.com/en/dev/topics/http/sessions/)";
 	cookie.filters.push(filter_obj);
 	return cookie;
@@ -44,6 +46,7 @@ function filter_check_if_django_csfrtoken(cookie) {
 
 	filter_obj = {}
 	filter_obj.name = "Django CSRF Token";
+	filter_obj.shortname = "Django CSRF";
 	filter_obj.description = "Python Web framework django csrf token cookie (https://docs.djangoproject.com/en/dev/ref/contrib/csrf/)";
 	cookie.filters.push(filter_obj);
 	return cookie;
@@ -57,6 +60,7 @@ function filter_check_if_php_session(cookie) {
 	
 	filter_obj = {}
 	filter_obj.name = "PHP session";
+	filter_obj.shortname = "PHP session"
 	filter_obj.description = "PHP session ID cookie (http://www.php.net/manual/en/function.session-id.php)";
 	cookie.filters.push(filter_obj);
 	return cookie;

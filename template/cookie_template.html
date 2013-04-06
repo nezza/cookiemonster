@@ -1,10 +1,15 @@
 <div class="cookie_container">
-	<div ng-init="cookie.local_show=0" class="cookie_title">
+	<div ng-init="cookie.local_show=0" class="cookie_title"  ng-click="cookie.local_show=!cookie.local_show">
 		<i class="icon-chevron-down" ng-show="!cookie.local_show"></i>
 		<i class="icon-chevron-up" ng-show="cookie.local_show"></i> 
-		<i class="icon-trash" ng-click="delete_cookie(cookie);"></i>
-		<span ng-click="cookie.local_show=!cookie.local_show">{{cookie.name}} (<i>{{cookie.domain}}{{cookie.path}}</i>)</span>
-		<i class="icon-pencil" ng-click="cookie.local_edit=1"></i>
+		<i class="icon-trash" ng-click="delete_cookie($event, cookie);"></i>
+		<span>{{cookie.name}} (<i>{{cookie.domain}}{{cookie.path}}</i>)
+			<span class="pull-right">
+				<span class="label label-success padded_label" ng-repeat="f in cookie.filters">{{f.shortname}}</span>
+				<span class="label label-inverse padded_label" ng-repeat="pf in cookie.prefilters">{{pf.shortname}}</span>
+			</span>
+		</span>
+		<i class="icon-pencil" ng-click="edit_cookie($event, cookie);"></i>
 	</div>
 	<div ng-show="cookie.local_edit">
 		<textarea autofocus tabindex="1" ng-init="cookie.local_value = cookie.value" ng-model="cookie.local_value" class="fullwidth_textarea"></textarea>
