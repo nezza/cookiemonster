@@ -227,6 +227,7 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 		$scope.all_snapshots = [];
 		chrome.storage.local.get(null, function(items) {
 			for(var item in items) {
+				if(items[item].type != "snapshot") continue;
 				if(items[item].domain !== get_domain_from_url($scope.tab.url)) {
 					$scope.all_snapshots.push({
 						"name": item,
@@ -247,6 +248,7 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 		var currentdate = new Date();
 		var cookiename = get_domain_from_url($scope.tab.url) + " cookies " + currentdate.toLocaleString();
 		var cookie_object = {
+			type: "snapshot",
 			url: $scope.tab.url,
 			domain: get_domain_from_url($scope.tab.url),
 			cookies: $scope.cookies
@@ -265,13 +267,10 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 					var ck = items[item].cookies[cookie];
 
 					if(!ck) continue;
-					ck.url = items[item].url;
 
-					// Not supported by cookies.set
-					delete ck.session;
-					delete ck.hostOnly;
+					var ck_pure = purify_cookie(ck, items[item].url);
 
-					chrome.cookies.set(ck);
+					chrome.cookies.set(ck_pure);
 				}
 				$scope.$emit('refreshCookies');
 				if(callback) {
