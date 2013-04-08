@@ -2,8 +2,12 @@ body {
 	font-family: "Helvetica Neue", Arial, sans-serif;
 	font-size: 13px;
 	width: 800px;
-	margin: 5px;
 }
+
+#frame {
+	padding: 5px;
+}
+
 .cookie_title {
 	background-color: #ddd;
 	cursor: pointer;
