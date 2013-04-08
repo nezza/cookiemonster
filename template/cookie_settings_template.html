@@ -1,9 +1,18 @@
 <div ng-controller="SettingsCtrl">
-    <h5>Settings</h5>
+    <h5>Settings:</h5>
     <p>
         <label class="checkbox">
 	        <input type="checkbox" ng-change="settingsChanged()" ng-model="settings['treat_analtytics_as_normal']">
 	        	Treat <i>"Analytics/Tracking cookies"</i> as regular cookies
         </label>
+    </p>
+    <h5>About:</h5>
+    <p>Source: <a href="https://github.com/nezza/cookiemonster">https://github.com/nezza/cookiemonster</a></p>
+    <p>
+    	Main Contributers:<br>
+    	<ul>
+	    	<li>Thomas Roth (<a "http://leveldown.de/">http://leveldown.de/</a>)</li>
+	    	<li>Fabian Faessler (<a "http://smrrd.de/">http://smrrd.de/</a>)</li>
+	    </ul>
     </p>
 </div>
