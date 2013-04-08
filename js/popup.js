@@ -1,4 +1,9 @@
 var cookiemonster = angular.module('cookiemonster', ['cookiemonsterDirectives']);
+var settings = {'treat_analtytics_as_normal': false};
+
+setting = function(name) {
+	return (settings && settings[name]);
+}
 
 function tracking_cookie(regex, category, description) {
 	var tc = new Object();
@@ -81,14 +86,15 @@ function update_cookie_object(cookie) {
 	cookie.is_known = false;
 	cookie.prefilters = [];
 	cookie.filters = [];
-
 	cookie.undecoded_value = cookie.value;
 	cookie.value = decodeURIComponent(cookie.value)
 
 	var tracking;
-	if(tracking = is_tracking_cookie(cookie.name)) {
-		cookie.is_tracking = true;
-		cookie.tracking = tracking;
+	if(!setting('treat_analtytics_as_normal')) {
+		if(tracking = is_tracking_cookie(cookie.name)) {
+			cookie.is_tracking = true;
+			cookie.tracking = tracking;
+		}
 	}
 
 	cookie = prefilter_cookie(cookie);
@@ -117,6 +123,7 @@ function CookieListCtrl($scope, $rootScope) {
 	$scope.curl_command = "";
 	$scope.wget_command = "";
 	$scope.url = "";
+	$scope.settings = settings;
 	
 	get_url_of_current_tab(function(url) {
 		$scope.url = url;
@@ -127,14 +134,28 @@ function CookieListCtrl($scope, $rootScope) {
 		$scope.refresh_cookies();
 	});
 
+	$rootScope.$on('settingsChanged', function() {
+		$scope.updateSettings();
+		$scope.refresh_cookies();
+	});
+
+	$scope.updateSettings = function() {
+		chrome.storage.local.get('settings',function(item) {
+			if(!jQuery.isEmptyObject(item)) {
+				$scope.settings = item['settings'];
+				settings = $scope.settings;
+				$scope.$apply("settings");
+			}
+		});
+	}
+
 	$scope.refresh_cookies = function() {
 		$scope.tracking_categories = {};
 		$scope.cookies = [];
-		
+		// treat_analtytics_as_normal
 		get_cookies_of_current_tab(function(cookies) {
 			for(var i=0; i < cookies.length; i++) {
 				cookies[i] = update_cookie_object(cookies[i])
-
 				// Set up tracking cookie categories
 				if(cookies[i].is_tracking) {
 					var category = cookies[i].tracking.category;
@@ -161,7 +182,6 @@ function CookieListCtrl($scope, $rootScope) {
 			$scope.$apply("wget_command");
 		});
 	}
-	$scope.refresh_cookies();
 
 	$scope.save_cookie = function(cookie) {
 		cookie.value = cookie.local_value;
@@ -192,11 +212,14 @@ function CookieListCtrl($scope, $rootScope) {
 		}
 	}
 	
-	// analyse cookie functions. Will take a cookie and a method to return value for the vield cookie.analysis
+	// analyse cookie functions. Will take a cookie and a method to return value for the field cookie.analysis
 	$scope.analyse = function(cookie,method) {
 		console.log("run analysis "+method);
 		cookie.analysis = analysis_methods[method](cookie);
 	}
+
+	$scope.updateSettings();
+	$scope.refresh_cookies();
 }
 
 function CookieSnapshotsCtrl($scope, $rootScope) {
@@ -222,7 +245,6 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 			$scope.$apply("cookies");
 		});
 	}
-	$scope.refresh_cookies();
 
 	$scope.refresh_snapshots = function() {
 		$scope.snapshots = [];
@@ -244,7 +266,6 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 			$scope.$apply("all_snapshots");
 		});
 	}
-	$scope.refresh_snapshots();
 
 	$scope.create_snapshot = function() {
 		var currentdate = new Date();
@@ -315,9 +336,30 @@ function CookieSnapshotsCtrl($scope, $rootScope) {
 			$scope.$emit('refreshCookies');
 		});
 	}
+
+	$scope.refresh_cookies();
+	$scope.refresh_snapshots();
 }
 
 
 function SettingsCtrl($scope, $rootScope) {
-	
+
+	$scope.settings = settings;
+
+	$scope.getSettings = function() {
+		chrome.storage.local.get('settings',function(item) {
+			if(!jQuery.isEmptyObject(item)) {
+				$scope.settings = item['settings'];
+				$scope.$apply("settings");
+			}
+		});
+	}
+
+	$scope.settingsChanged = function() {
+		chrome.storage.local.set({ 'settings': $scope.settings },function() {});
+		settings = $scope.settings;
+		$scope.$emit('settingsChanged');
+	}
+
+	$scope.getSettings();
 }

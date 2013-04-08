@@ -1,6 +1,9 @@
 <div ng-controller="SettingsCtrl">
     <h5>Settings</h5>
     <p>
-        <i> -- Settings Placeholder -- </i>
+        <label class="checkbox">
+	        <input type="checkbox" ng-change="settingsChanged()" ng-model="settings['treat_analtytics_as_normal']">
+	        	Treat <i>"Analytics/Tracking cookies"</i> as regular cookies
+        </label>
     </p>
 </div>
