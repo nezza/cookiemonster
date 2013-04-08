@@ -8,14 +8,21 @@ function is_valid_hex(data) {
 }
 
 function is_valid_int(data) {
-	if(data.match(/^[0-9]+$/)) {
+	if(data.match(/^[1-9][0-9]*$/)) {
+		return true;
+	}
+	return false;
+}
+
+function is_valid_string(data) {
+	if(data.match(/^[a-zA-Z0-9]+$/)) {
 		return true;
 	}
 	return false;
 }
 
 function is_valid_float(data) {
-	if(data.match(/^[0-9]+(\.|,)[0-9]+$/)) {
+	if(data.match(/^[1-9][0-9]*(\.|,)[0-9]+$/)) {
 		return true;
 	}
 	return false;

@@ -49,6 +49,19 @@ tracking_cookies_definitions = {
 		"^_otui$",
 		"^_otpe$",
 	],
+	"Maxymiser - http://www.maxymiser.com/cookies": [
+		"^mmcore.pd$",
+		"^mmcore.srv$",
+		"^mmcore.tst$",
+		"^mmid$",
+		"^mmpa.rh$",
+		"^mmcore.id$",
+		"^mmpa.tst$",
+		"^mm_([a-zA-Z0-9_])+$",
+	],
+	"IBM Unica NetInsight": [
+		"^UnicaNIODID$"
+	],
 }
 
 function is_tracking_cookie(cookiename) {
