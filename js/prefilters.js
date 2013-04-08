@@ -44,6 +44,28 @@ function prefilter_check_if_sha1(cookie) {
 	return cookie;
 }
 
+function prefilter_check_if_integer(cookie) {
+	prefilter_obj = {}
+	prefilter_obj.shortname = "int";
+	prefilter_obj.name = "Integer";
+	prefilter_obj.description = "The object is a valid integer number.";
+	if(is_valid_int(cookie.value)) {
+		cookie.prefilters.push(prefilter_obj);
+	}
+	return cookie;
+}
+
+function prefilter_check_if_float(cookie) {
+	prefilter_obj = {}
+	prefilter_obj.shortname = "float";
+	prefilter_obj.name = "Float";
+	prefilter_obj.description = "The object is a valid float.";
+	if(is_valid_float(cookie.value)) {
+		cookie.prefilters.push(prefilter_obj);
+	}
+	return cookie;
+}
+
 //^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
 
 prefilters = [
@@ -51,4 +73,6 @@ prefilters = [
 	prefilter_check_if_hex,
 	prefilter_check_if_md5,
 	prefilter_check_if_sha1,
+	prefilter_check_if_integer,
+	prefilter_check_if_float,
 ]

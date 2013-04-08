@@ -1,6 +1,21 @@
+
 function is_valid_hex(data) {
 	if((data.length%2) != 0) return false;
 	if(data.match(/^([a-fA-F0-9]){2,}$/)) {
+		return true;
+	}
+	return false;
+}
+
+function is_valid_int(data) {
+	if(data.match(/^[0-9]+$/)) {
+		return true;
+	}
+	return false;
+}
+
+function is_valid_float(data) {
+	if(data.match(/^[0-9]+(\.|,)[0-9]+$/)) {
 		return true;
 	}
 	return false;
@@ -13,6 +28,9 @@ function is_valid_base64(data) {
 	}
 	return false;
 }
+
+
+
 
 function get_current_tab(callback) {
 	chrome.tabs.query({"windowId":chrome.windows.WINDOW_ID_CURRENT,"active":true}, function(tab){

@@ -24,7 +24,15 @@ analysis_methods = {
         try {
             return "<p><pre>"+JSON.stringify(JSON.parse(cookie.value),' ',4)+"</p></pre>";
         } catch(e) {
-            return error("error parsing: "+e.message);	
+            return error("error parsing: "+e.message);  
+        }
+    },
+
+    "timestamp" : function(cookie) {
+        try {
+            return "<p><pre>"+(new Date(parseInt(cookie.value)*1000)).toUTCString()+"</p></pre>";
+        } catch(e) {
+            return error("error parsing: "+e.message);  
         }
     },
     
