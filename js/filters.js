@@ -108,7 +108,6 @@ function filter_check_if_expressionengine(cookie) {
 	cookie.filters.push(filter_obj);
 	return cookie;
 }
-http://ellislab.com/expressionengine
 
 filters = [
 	filter_check_if_rails_session, 
