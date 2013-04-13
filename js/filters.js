@@ -92,6 +92,17 @@ function filter_check_if_jspsession(cookie) {
 	return cookie;
 }
 
+function filter_check_if_cloudflare_id(cookie) {
+	if(cookie.name === "__cfduid") {
+		filter_obj = {}
+		filter_obj.name = "Cloudflare cookie";
+		filter_obj.shortname ="cloudflare";
+		filter_obj.description = "Cloudflare Cookie - see https://support.cloudflare.com/entries/22437336-What-does-the-CloudFlare-cfduid-cookie-do-";
+		cookie.filters.push(filter_obj);
+	}
+	return cookie;
+}
+
 filters = [
 	filter_check_if_rails_session, 
 	filter_check_if_django_session,
@@ -99,4 +110,5 @@ filters = [
 	filter_check_if_php_session,
 	filter_check_if_expressionengine,
 	filter_check_if_jspsession,
+	filter_check_if_cloudflare_id,
 ]
