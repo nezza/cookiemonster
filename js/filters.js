@@ -66,39 +66,10 @@ function filter_check_if_php_session(cookie) {
 	return cookie;
 }
 
-function filter_check_if_addthis(cookie) {
-	// http://www.addthis.com/
-	// source http://www.bbsrc.ac.uk/site/privacy.aspx
-	
-	if(cookie.name == "di" || cookie.name == "bt" || cookie.name == "loc"  || cookie.name == "uid") {
-		if(!is_valid_string(cookie.value)) return cookie;
-	} else if (cookie.name == "dt") {
-		if(cookie.value!="X") return cookie;
-	} else if (cookie.name == "psc" || cookie.name == "uit") {
-		if(!is_valid_int(cookie.value)) return cookie;
-	} else if (cookie.name == "uvc") {
-		if(!(cookie.value.split("|").length==2 && is_valid_int(cookie.value.split("|")[0]) && is_valid_int(cookie.value.split("|")[1]))) return cookie;
-	} else if (cookie.name == "ssc") {
-
-	} else {
-		return cookie;
-	}
-
-	filter_obj = {}
-	filter_obj.name = "AddThis sharing platform";
-	filter_obj.shortname = "AddThis"
-	filter_obj.description = "AddThis is the world's largest sharing platform";
-	
-	cookie.filters.push(filter_obj);
-	return cookie;
-}
-
 function filter_check_if_expressionengine(cookie) {
 	// http://ellislab.com/expressionengine
 	// source: http://moogaloo.com/privacy/
-	if(!cookie.name.match(/^exp_.+$/)) {
-		return cookie;
-	}
+	if(!cookie.name.match(/^exp_.+$/)) return cookie;
 
 	filter_obj = {}
 	filter_obj.name = "ExpressionEngine CMS";
@@ -108,14 +79,24 @@ function filter_check_if_expressionengine(cookie) {
 	cookie.filters.push(filter_obj);
 	return cookie;
 }
-http://ellislab.com/expressionengine
+
+function filter_check_if_jspsession(cookie) {
+	if(cookie.name != "JSESSIONID") return cookie;
+
+	filter_obj = {}
+	filter_obj.name = "JSP session";
+	filter_obj.shortname = "JSP session"
+	filter_obj.description = "Java Server Pages Session Cookie - http://www.oracle.com/technetwork/java/jsp-138432.html";
+	
+	cookie.filters.push(filter_obj);
+	return cookie;
+}
 
 filters = [
 	filter_check_if_rails_session, 
 	filter_check_if_django_session,
 	filter_check_if_django_csfrtoken,
 	filter_check_if_php_session,
-	filter_check_if_addthis,
 	filter_check_if_expressionengine,
+	filter_check_if_jspsession,
 ]
-

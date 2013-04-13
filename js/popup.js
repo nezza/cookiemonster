@@ -62,6 +62,17 @@ tracking_cookies_definitions = {
 	"IBM Unica NetInsight": [
 		"^UnicaNIODID$"
 	],
+	"Optimizely": [ // https://www.optimizely.com/
+		"^optimizely[A-Z].*$",
+	],
+	"AddThis": [ // http://www.addthis.com/ ; source: http://www.bbsrc.ac.uk/site/privacy.aspx
+		"^di$", 
+		"^dt$", 
+		"^psc$", 
+		"^uit$", 
+		"^uvc$", 
+		"^ssc$",
+	]
 }
 
 function is_tracking_cookie(cookiename) {
