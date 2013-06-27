@@ -16,7 +16,7 @@ function filter_check_if_rails_session(cookie) {
 		return cookie;
 	}
 
-	filter_obj = {}
+	var filter_obj = {}
 	filter_obj.name ="Ruby on Rails session";
 	filter_obj.shortname = "Rails Session";
 	filter_obj.description = "Marshalled ruby object: " + marshalled_object;
@@ -30,7 +30,7 @@ function filter_check_if_django_session(cookie) {
 	if(!is_valid_base64(cookie.value)) return cookie;
 	if(cookie.value.length!=32) return cookie;
 
-	filter_obj = {}
+	var filter_obj = {}
 	filter_obj.name = "Django session";
 	filter_obj.shortname = "Django session";
 	filter_obj.description = "Python Web framework django session cookie (https://docs.djangoproject.com/en/dev/topics/http/sessions/)";
@@ -44,7 +44,7 @@ function filter_check_if_django_csfrtoken(cookie) {
 	if(!is_valid_hex(cookie.value)) return cookie;
 	if(cookie.value.length!=32) return cookie;
 
-	filter_obj = {}
+	var filter_obj = {}
 	filter_obj.name = "Django CSRF Token";
 	filter_obj.shortname = "Django CSRF";
 	filter_obj.description = "Python Web framework django csrf token cookie (https://docs.djangoproject.com/en/dev/ref/contrib/csrf/)";
@@ -58,7 +58,7 @@ function filter_check_if_php_session(cookie) {
 	if(!is_valid_string(cookie.value)) return cookie;
 	if(cookie.value.length!=32 && cookie.value.length!=26) return cookie;
 	
-	filter_obj = {}
+	var filter_obj = {}
 	filter_obj.name = "PHP session";
 	filter_obj.shortname = "PHP session"
 	filter_obj.description = "PHP session ID cookie (http://www.php.net/manual/en/function.session-id.php)";
@@ -84,7 +84,7 @@ function filter_check_if_addthis(cookie) {
 		return cookie;
 	}
 
-	filter_obj = {}
+	var filter_obj = {}
 	filter_obj.name = "AddThis sharing platform";
 	filter_obj.shortname = "AddThis"
 	filter_obj.description = "AddThis is the world's largest sharing platform";
@@ -100,7 +100,7 @@ function filter_check_if_expressionengine(cookie) {
 		return cookie;
 	}
 
-	filter_obj = {}
+	var filter_obj = {}
 	filter_obj.name = "ExpressionEngine CMS";
 	filter_obj.shortname = "ExpressionEngine"
 	filter_obj.description = "EllisLab ExpressionEngine CMS - http://ellislab.com/expressionengine";
@@ -111,7 +111,7 @@ function filter_check_if_expressionengine(cookie) {
 
 function filter_check_if_cloudflare_id(cookie) {
 	if(cookie.name === "__cfduid") {
-		filter_obj = {}
+		var filter_obj = {}
 		filter_obj.name = "Cloudflare cookie";
 		filter_obj.shortname ="cloudflare";
 		filter_obj.description = "Cloudflare Cookie - see https://support.cloudflare.com/entries/22437336-What-does-the-CloudFlare-cfduid-cookie-do-";

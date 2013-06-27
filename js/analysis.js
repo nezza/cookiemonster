@@ -50,11 +50,11 @@ hexdump = function(data) {
     00000030  74 69 6e 67 20 63 68 72  6f 6d 65 20 65 78 74 65  |ting chrome exte|
     00000040  6e 73 69 6f 6e                                    |nsion|
     */
-    out = "<p><pre>";
-    hexline = "";
-    charline = "";
+    var out = "<p><pre>";
+    var hexline = "";
+    var charline = "";
     
-    for (i=0; i < data.length; i++) {
+    for (var i=0; i < data.length; i++) {
         var character = data.substr(i, 1);
         var charcode = data.charCodeAt(i);
         var hex = (charcode < 16) ? "0" + charcode.toString(16) : charcode.toString(16);

@@ -156,7 +156,7 @@ function CookieListCtrl($scope, $rootScope) {
 		chrome.storage.local.get('settings',function(item) {
 			if(!jQuery.isEmptyObject(item)) {
 				$scope.settings = item['settings'];
-				settings = $scope.settings;
+				var settings = $scope.settings;
 				$scope.$apply("settings");
 			}
 		});
@@ -370,7 +370,7 @@ function SettingsCtrl($scope, $rootScope) {
 
 	$scope.settingsChanged = function() {
 		chrome.storage.local.set({ 'settings': $scope.settings },function() {});
-		settings = $scope.settings;
+		var settings = $scope.settings;
 		$scope.$emit('settingsChanged');
 	}
 

@@ -78,14 +78,14 @@ function generate_cookie_header_list(cookies) {
 }
 
 function generate_wget_command(cookies, url) {
-	wget_command = "wget --no-cookies --header 'Cookie: "
+	var wget_command = "wget --no-cookies --header 'Cookie: "
 	wget_command += generate_cookie_header_list(cookies);
 	wget_command += "' '" + url + "'";
 	return wget_command;
 }
 
 function generate_curl_command(cookies, url) {
-	curl_command = "curl -LO --cookie '";
+	var curl_command = "curl -LO --cookie '";
 	curl_command += generate_cookie_header_list(cookies);
 	curl_command += "' '" + url + "'";
 	return curl_command;

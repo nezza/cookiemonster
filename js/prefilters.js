@@ -1,5 +1,5 @@
 function prefilter_check_if_hex(cookie) {
-	prefilter_obj = {};
+	var prefilter_obj = {};
 	prefilter_obj.shortname = "Hex";
 	prefilter_obj.name = "Hex";
 	prefilter_obj.description = "The object is valid Hex.";
@@ -11,7 +11,7 @@ function prefilter_check_if_hex(cookie) {
 
 function prefilter_check_if_b64(cookie) {
 	// RegEx from: http://stackoverflow.com/questions/8571501/how-to-check-whether-the-string-is-base64-encoded-or-not
-	prefilter_obj = {}
+	var prefilter_obj = {}
 	prefilter_obj.shortname = "B64";
 	prefilter_obj.name = "Base64";
 	prefilter_obj.description = "The object is valid Base64.";
@@ -22,7 +22,7 @@ function prefilter_check_if_b64(cookie) {
 }
 
 function prefilter_check_if_md5(cookie) {
-	prefilter_obj = {}
+	var prefilter_obj = {}
 	prefilter_obj.shortname = "MD5";
 	prefilter_obj.name = "MD5 Hash";
 	prefilter_obj.description = "The object is a valid MD5 hash.";
@@ -34,7 +34,7 @@ function prefilter_check_if_md5(cookie) {
 
 
 function prefilter_check_if_sha1(cookie) {
-	prefilter_obj = {}
+	var prefilter_obj = {}
 	prefilter_obj.shortname = "SHA-1";
 	prefilter_obj.name = "SHA-1 Hash";
 	prefilter_obj.description = "The object is a valid SHA-1 hash.";
@@ -45,7 +45,7 @@ function prefilter_check_if_sha1(cookie) {
 }
 
 function prefilter_check_if_integer(cookie) {
-	prefilter_obj = {}
+	var prefilter_obj = {}
 	prefilter_obj.shortname = "int";
 	prefilter_obj.name = "Integer";
 	prefilter_obj.description = "The object is a valid integer number.";
@@ -56,7 +56,7 @@ function prefilter_check_if_integer(cookie) {
 }
 
 function prefilter_check_if_float(cookie) {
-	prefilter_obj = {}
+	var prefilter_obj = {}
 	prefilter_obj.shortname = "float";
 	prefilter_obj.name = "Float";
 	prefilter_obj.description = "The object is a valid float.";
