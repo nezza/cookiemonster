@@ -66,7 +66,30 @@ function prefilter_check_if_float(cookie) {
 	return cookie;
 }
 
-//^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
+function prefilter_check_if_timestamp(cookie) {
+	prefilter_obj = {}
+	prefilter_obj.shortname = "timestamp";
+	prefilter_obj.name = "timestamp";
+	prefilter_obj.description = "The number could be a timestamp.";
+	if(is_valid_int(cookie.value) && cookie.value.length == 10) {
+		cookie.prefilters.push(prefilter_obj);
+	}
+	return cookie;
+}
+
+function prefilter_check_if_json(cookie) {
+	try {
+        JSON.parse(cookie.value);
+        prefilter_obj = {}
+		prefilter_obj.shortname = "json";
+		prefilter_obj.name = "JSON";
+		prefilter_obj.description = "The object is valid json.";
+		cookie.prefilters.push(prefilter_obj);
+        return cookie;
+    } catch(e) {
+        return cookie;  
+    }
+}
 
 prefilters = [
 	prefilter_check_if_b64,
@@ -75,4 +98,6 @@ prefilters = [
 	prefilter_check_if_sha1,
 	prefilter_check_if_integer,
 	prefilter_check_if_float,
+	prefilter_check_if_json,
+	prefilter_check_if_timestamp,
 ]
