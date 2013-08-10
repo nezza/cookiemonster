@@ -2,6 +2,7 @@ var cookiemonster = angular.module('cookiemonster', ['cookiemonsterDirectives'])
 var settings = {'treat_analtytics_as_normal': false};
 
 setting = function(name) {
+	console.log(settings)
 	return (settings && settings[name]);
 }
 
@@ -123,9 +124,8 @@ function update_cookie_object(cookie) {
 	if(cookie.session)
 		cookie.types.push('session');
 
-	
-
 	var tracking;
+	console.log(setting('treat_analtytics_as_normal'))
 	if(!setting('treat_analtytics_as_normal')) {
 		if(tracking = is_tracking_cookie(cookie.name)) {
 			cookie.is_tracking = true;
@@ -177,9 +177,10 @@ function CookieListCtrl($scope, $rootScope) {
 
 	$scope.updateSettings = function() {
 		chrome.storage.local.get('settings',function(item) {
+			console.log(item)
 			if(!jQuery.isEmptyObject(item)) {
 				$scope.settings = item['settings'];
-				var settings = $scope.settings;
+				settings = $scope.settings;
 				$scope.$apply("settings");
 			}
 		});
