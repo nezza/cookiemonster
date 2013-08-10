@@ -110,8 +110,19 @@ function update_cookie_object(cookie) {
 	cookie.is_known = false;
 	cookie.prefilters = [];
 	cookie.filters = [];
+	cookie.types = [];
 	cookie.undecoded_value = cookie.value;
 	cookie.value = decodeURIComponent(cookie.value)
+
+	console.log(cookie)
+	if(cookie.hostOnly)
+		cookie.types.push('hostOnly');
+	if(cookie.httpOnly)
+		cookie.types.push('httpOnly');
+	if(cookie.secure)
+		cookie.types.push('secure');
+	if(cookie.session)
+		cookie.types.push('session');
 
 	var tracking;
 	if(!setting('treat_analtytics_as_normal')) {

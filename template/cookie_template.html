@@ -5,6 +5,7 @@
 		<i class="icon-trash" ng-click="delete_cookie($event, cookie);"></i>
 		<span>{{cookie.name}} (<i>{{cookie.domain}}{{cookie.path}}</i>)
 			<span class="pull-right">
+				<span class="label label-info padded_label" ng-repeat="t in cookie.types">{{t}}</span>
 				<span class="label label-success padded_label" ng-repeat="f in cookie.filters">{{f.shortname}}</span>
 				<span class="label label-inverse padded_label" ng-repeat="pf in cookie.prefilters">{{pf.shortname}}</span>
 			</span>
