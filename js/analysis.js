@@ -57,6 +57,8 @@ hexdump = function(data) {
     for (var i=0; i < data.length; i++) {
         var character = data.substr(i, 1);
         var charcode = data.charCodeAt(i);
+        character = character.replace('<','&lt;').replace( '>','&gt;');
+
         var hex = (charcode < 16) ? "0" + charcode.toString(16) : charcode.toString(16);
         var address = parseInt(i/16)*16;
         
@@ -86,7 +88,7 @@ hexdump = function(data) {
 rawOutput = function(data) {
     return ' <div class="input-prepend input-xxlarge"> \
                 <span class="add-on">raw</span> \
-                <input class="input-xxlarge" type="text" value="'+data+'"> \
+                <input class="input-xxlarge" type="text" value="'+data.replace( '"','&quot;')+'"> \
             </div>';
 }
 
